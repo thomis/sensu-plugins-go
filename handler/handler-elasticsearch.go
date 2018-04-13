@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hico-horiuchi/sensu-plugins-go/lib/handler"
+	"github.com/portertech/sensu-plugins-go/lib/handler"
 )
 
 type metricsStruct struct {

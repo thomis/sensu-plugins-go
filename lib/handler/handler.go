@@ -7,7 +7,7 @@ import (
 	"os"
 
 	simplejson "github.com/bitly/go-simplejson"
-	"github.com/hico-horiuchi/ohgi/sensu"
+	"github.com/hico-horiuchi/ohgibone/sensu"
 )
 
 type handlerStruct struct {

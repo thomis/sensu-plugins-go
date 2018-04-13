@@ -2,6 +2,7 @@
 .*.swp
 *#*
 .DS_Store
+vendor
 /_vendor
 /.vendor
 /bin/check-*

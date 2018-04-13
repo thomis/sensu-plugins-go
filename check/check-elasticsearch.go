@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/hico-horiuchi/sensu-plugins-go/lib/check"
+	"github.com/portertech/sensu-plugins-go/lib/check"
 )
 
 type healthStruct struct {

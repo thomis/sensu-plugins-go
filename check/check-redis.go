@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/garyburd/redigo/redis"
-	"github.com/hico-horiuchi/sensu-plugins-go/lib/check"
+	"github.com/portertech/sensu-plugins-go/lib/check"
 )
 
 func main() {

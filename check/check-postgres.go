@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/hico-horiuchi/sensu-plugins-go/lib/check"
 	_ "github.com/lib/pq"
+	"github.com/portertech/sensu-plugins-go/lib/check"
 )
 
 func main() {

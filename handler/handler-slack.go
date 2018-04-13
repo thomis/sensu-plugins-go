@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/hico-horiuchi/sensu-plugins-go/lib/handler"
+	"github.com/portertech/sensu-plugins-go/lib/handler"
 )
 
 type attachmentStruct struct {

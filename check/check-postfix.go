@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/hico-horiuchi/sensu-plugins-go/lib/check"
+	"github.com/portertech/sensu-plugins-go/lib/check"
 )
 
 func main() {

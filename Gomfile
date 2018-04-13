@@ -1,6 +1,6 @@
 gom 'github.com/bitly/go-simplejson'
 gom 'github.com/garyburd/redigo/redis'
-gom 'github.com/hico-horiuchi/ohgi/sensu'
+gom 'github.com/hico-horiuchi/ohgibone/sensu'
 gom 'github.com/lib/pq'
 gom 'github.com/spf13/pflag'
 

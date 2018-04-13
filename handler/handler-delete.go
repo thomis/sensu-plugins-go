@@ -3,8 +3,8 @@ package main
 import (
 	"sort"
 
-	"github.com/hico-horiuchi/ohgi/sensu"
-	"github.com/hico-horiuchi/sensu-plugins-go/lib/handler"
+	"github.com/hico-horiuchi/ohgibone/sensu"
+	"github.com/portertech/sensu-plugins-go/lib/handler"
 )
 
 func main() {

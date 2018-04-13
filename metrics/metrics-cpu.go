@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hico-horiuchi/sensu-plugins-go/lib/metrics"
+	"github.com/portertech/sensu-plugins-go/lib/metrics"
 )
 
 func main() {
