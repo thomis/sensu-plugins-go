@@ -16,3 +16,6 @@ build: fmt $(SOURCES)
 
 clean:
 	rm -f bin/*
+
+check_asset:
+	tar -cvzf sensu-check-plugins.tar.gz bin/check-*
