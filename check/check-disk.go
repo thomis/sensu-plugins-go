@@ -1,5 +1,4 @@
 package main
-// add perf data
 
 import (
 	"fmt"
