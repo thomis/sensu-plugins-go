@@ -18,9 +18,9 @@ func main() {
 	)
 
 	c := check.New("CheckCPU")
-	c.Option.IntVarP(&warn, "warn", "w", 80, "WARN")
-	c.Option.IntVarP(&crit, "crit", "c", 90, "CRIT")
-	c.Option.IntVarP(&sleep, "sleep", "s", 1, "SLEEP")
+	c.Option.IntVarP(&warn, "warn", "w", 80, "Warning threshold")
+	c.Option.IntVarP(&crit, "crit", "c", 90, "Critical threshold")
+	c.Option.IntVarP(&sleep, "sleep", "s", 1, "Sleep time for sampling")
 	c.Init()
 
 	usage, err := cpuUsage(sleep)
@@ -28,29 +28,30 @@ func main() {
 		c.Error(err)
 	}
 
+	output, perf := formatPerfs(usage, warn, crit)
 	switch {
-	case usage >= float64(crit):
-		c.Critical(fmt.Sprintf("%.0f%%", usage))
-	case usage >= float64(warn):
-		c.Warning(fmt.Sprintf("%.0f%%", usage))
+	case usage[3] <= float64(100-crit):
+		c.Critical(fmt.Sprintf("%s | %s", output, perf))
+	case usage[3] <= float64(100-warn):
+		c.Warning(fmt.Sprintf("%s | %s", output, perf))
 	default:
-		c.Ok(fmt.Sprintf("%.0f%%", usage))
+		c.Ok(fmt.Sprintf("%s | %s", output, perf))
 	}
 }
 
-func cpuUsage(sleep int) (float64, error) {
-	var usage, totalDiff float64
+func cpuUsage(sleep int) ([]float64, error) {
+	var totalDiff float64
 
 	beforeStats, err := getStats()
 	if err != nil {
-		return usage, err
+		return []float64{}, err
 	}
 
 	time.Sleep(time.Duration(sleep) * time.Second)
 
 	afterStats, err := getStats()
 	if err != nil {
-		return usage, err
+		return []float64{}, err
 	}
 
 	diffStats := make([]float64, len(beforeStats))
@@ -59,8 +60,11 @@ func cpuUsage(sleep int) (float64, error) {
 		totalDiff += diffStats[i]
 	}
 
-	usage = 100.0 * (totalDiff - diffStats[3]) / totalDiff
-	return usage, nil
+	usageStats := make([]float64, len(beforeStats))
+	for i := range diffStats {
+		usageStats[i] = 100.0 - (100.0 * (totalDiff - diffStats[i]) / totalDiff)
+	}
+	return usageStats, nil
 }
 
 func getStats() ([]float64, error) {
@@ -81,4 +85,23 @@ func getStats() ([]float64, error) {
 	}
 
 	return result, nil
+}
+func formatPerfs(usageStats []float64, warn int, crit int) (string, string) {
+
+	var other float64
+
+	// This is based on
+	// 0 - user
+	// 1 - nice
+	// 2 - system
+	// 3 - idle
+	// 4 - iowait
+	// 5 - 9 (possible) other fields
+
+	for i := range usageStats[5:] {
+		other += usageStats[5+i]
+	}
+	output := fmt.Sprintf("user=%.2f%% system=%.2f%% iowait=%.2f%% other=%.2f%% idle=%.2f%%", usageStats[0]+usageStats[1], usageStats[2], usageStats[4], other, usageStats[3])
+	perf := fmt.Sprintf("cpu_user=%.2f%%;%d;%d; cpu_system=%.2f%%;%d;%d; cpu_iowait=%.2f%%;%d;%d; cpu_other=%.2f%%;%d;%d; cpu_idle=%.2f%%;", usageStats[0]+usageStats[1], warn, crit, usageStats[2], warn, crit, usageStats[4], warn, crit, other, warn, crit, usageStats[3])
+	return output, perf
 }
