@@ -102,6 +102,6 @@ func formatOutput(usageStats []float64, warn int, crit int) (string, string) {
 		other += usageStats[5+i]
 	}
 	output := fmt.Sprintf("user=%.2f%% system=%.2f%% iowait=%.2f%% other=%.2f%% idle=%.2f%%", usageStats[0]+usageStats[1], usageStats[2], usageStats[4], other, usageStats[3])
-	perf := fmt.Sprintf("cpu_user=%.2f%%;%d;%d; cpu_system=%.2f%%;%d;%d; cpu_iowait=%.2f%%;%d;%d; cpu_other=%.2f%%;%d;%d; cpu_idle=%.2f%%;", usageStats[0]+usageStats[1], warn, crit, usageStats[2], warn, crit, usageStats[4], warn, crit, other, warn, crit, usageStats[3])
+	perf := fmt.Sprintf("cpu_user=%.2f%%;%d;%d cpu_system=%.2f%%;%d;%d cpu_iowait=%.2f%%;%d;%d cpu_other=%.2f%%;%d;%d cpu_idle=%.2f%%", usageStats[0]+usageStats[1], warn, crit, usageStats[2], warn, crit, usageStats[4], warn, crit, other, warn, crit, usageStats[3])
 	return output, perf
 }
