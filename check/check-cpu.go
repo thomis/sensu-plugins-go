@@ -28,7 +28,7 @@ func main() {
 		c.Error(err)
 	}
 
-	output, perf := formatPerfs(usage, warn, crit)
+	output, perf := formatOutput(usage, warn, crit)
 	switch {
 	case usage[3] <= float64(100-crit):
 		c.Critical(fmt.Sprintf("%s | %s", output, perf))
@@ -86,7 +86,7 @@ func getStats() ([]float64, error) {
 
 	return result, nil
 }
-func formatPerfs(usageStats []float64, warn int, crit int) (string, string) {
+func formatOutput(usageStats []float64, warn int, crit int) (string, string) {
 
 	var other float64
 
