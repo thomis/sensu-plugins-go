@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os/exec"
+	"io/ioutil"
 	"strconv"
 	"strings"
 
@@ -16,42 +16,58 @@ func main() {
 	)
 
 	c := check.New("CheckMemory")
-	c.Option.IntVarP(&warn, "warn", "w", 80, "WARN")
-	c.Option.IntVarP(&crit, "crit", "c", 90, "CRIT")
+	c.Option.IntVarP(&warn, "warn", "w", 80, "Warning (>=) threshold level")
+	c.Option.IntVarP(&crit, "crit", "c", 90, "Critical (>=) threshold level")
 	c.Init()
 
-	usage, err := memoryUsage()
+	memTotal, memAvailable, err := memoryUsage()
 	if err != nil {
 		c.Error(err)
 	}
 
+	usage := 100.0 - (100.0 * memAvailable / memTotal)
+
 	switch {
 	case usage >= float64(crit):
-		c.Critical(fmt.Sprintf("%.0f%%", usage))
+		c.Critical(fmt.Sprintf("%.2f%% MemTotal:%.2fMB MemAvailable:%.2fMB | mem_usage=%.2f%%;%d;%d mem_available=%.2fMB", usage, memTotal, memAvailable, usage, warn, crit, memAvailable))
 	case usage >= float64(warn):
-		c.Warning(fmt.Sprintf("%.0f%%", usage))
+		c.Warning(fmt.Sprintf("%.2f%% MemTotal:%.2fMB MemAvailable:%.2fMB | mem_usage=%.2f%%;%d;%d mem_available=%.2fMB", usage, memTotal, memAvailable, usage, warn, crit, memAvailable))
 	default:
-		c.Ok(fmt.Sprintf("%.0f%%", usage))
+		c.Ok(fmt.Sprintf("%.2f%% MemTotal:%.2fMB MemAvailable:%.2fMB | mem_usage=%.2f%%;%d;%d mem_available=%.2fMB", usage, memTotal, memAvailable, usage, warn, crit, memAvailable))
 	}
 }
 
-func memoryUsage() (float64, error) {
-	out, err := exec.Command("free").Output()
+func memoryUsage() (float64, float64, error) {
+	var (
+		memTotal     float64
+		memAvailable float64
+	)
+
+	contents, err := ioutil.ReadFile("/proc/meminfo")
 	if err != nil {
-		return 0.0, err
+		return 0.0, 0.0, err
 	}
 
-	lines := strings.Split(string(out), "\n")
+	lines := strings.Split(string(contents), "\n")
 
-	total, err := strconv.ParseFloat(strings.Fields(lines[1])[1], 64)
-	if err != nil {
-		return 0.0, err
+	for i := range lines[:len(lines)-1] {
+		stats := strings.Fields(lines[i])
+		switch {
+		case stats[0] == "MemTotal:":
+			memTotal, err = strconv.ParseFloat(stats[1], 64)
+			if err != nil {
+				return 0.0, 0.0, err
+			}
+		case stats[0] == "MemAvailable:":
+			memAvailable, err = strconv.ParseFloat(stats[1], 64)
+			if err != nil {
+				return 0.0, 0.0, err
+			}
+		}
+		if memTotal > 0.0 && memAvailable > 0.0 {
+			break
+		}
 	}
 
-	free, err := strconv.ParseFloat(strings.Fields(lines[2])[3], 64)
-	if err != nil {
-		return 0.0, err
-	}
-
-	return 100.0 - (100.0 * free / total), nil
+	return memTotal / 1024.0, memAvailable / 1024.0, nil
 }
