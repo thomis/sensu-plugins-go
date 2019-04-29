@@ -29,9 +29,9 @@ func main() {
 	c.Init()
 
 	processStatus, processErr := checkProcessRunning(pidFile)
-        if ! processStatus {
-                c.Critical(fmt.Sprintf("%v", processErr))
-        }
+	if !processStatus {
+		c.Critical(fmt.Sprintf("%v", processErr))
+	}
 
 	if checkStatus {
 		connections, statusErr := nginxStatus(url, timeout)
@@ -41,7 +41,7 @@ func main() {
 
 		c.Ok(fmt.Sprintf("connections = %d | nginx_connections=%d", connections, connections))
 	}
-        c.Ok("OK")
+	c.Ok("OK")
 
 }
 
@@ -57,7 +57,7 @@ func checkProcessRunning(pidFile string) (bool, error) {
 		return false, fmt.Errorf("failed to determine PID from PID file %s, error: %s", pidFile, err)
 	}
 
-        process, err := os.FindProcess(int(pid))
+	process, err := os.FindProcess(int(pid))
 	if err != nil {
 		return false, fmt.Errorf("failed to find process for PID %d, error: %s", pid, err)
 	}
