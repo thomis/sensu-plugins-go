@@ -3,7 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
-        "os"
+	"os"
 	"regexp"
 
 	_ "github.com/go-sql-driver/mysql"

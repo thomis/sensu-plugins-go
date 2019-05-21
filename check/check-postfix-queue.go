@@ -1,18 +1,18 @@
 package main
 
 import (
-    "fmt"
-    "os"
-    "path/filepath"
+	"fmt"
+	"os"
+	"path/filepath"
 
-    "github.com/portertech/sensu-plugins-go/lib/check"
+	"github.com/portertech/sensu-plugins-go/lib/check"
 )
 
 func main() {
 	var (
 		queue string
-		warn int
-		crit int
+		warn  int
+		crit  int
 	)
 
 	c := check.New("CheckPostfixQueue")
@@ -21,11 +21,11 @@ func main() {
 	c.Option.IntVarP(&crit, "crit", "c", 10, "Critical threshold")
 	c.Init()
 
-        queueDir := fmt.Sprintf("/var/spool/postfix/%s", queue)
+	queueDir := fmt.Sprintf("/var/spool/postfix/%s", queue)
 
-        if _, err := os.Stat(queueDir); os.IsNotExist(err) || os.IsPermission(err) {
-            c.Error(fmt.Errorf("Cannot access queue directory %s: %v", queueDir, err))
-        }
+	if _, err := os.Stat(queueDir); os.IsNotExist(err) || os.IsPermission(err) {
+		c.Error(fmt.Errorf("Cannot access queue directory %s: %v", queueDir, err))
+	}
 
 	queueLength, err := mailQueue(queueDir)
 	if err != nil {
@@ -39,25 +39,24 @@ func main() {
 		c.Warning(fmt.Sprintf("%d messages in the postfix mail queue", queueLength))
 	default:
 		c.Ok(fmt.Sprintf("%d messages in the postfix mail queue", queueLength))
-        }
+	}
 }
 
 func mailQueue(path string) (int, error) {
 
-    var files []string
+	var files []string
 
-    err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
-        if info.IsDir() {
-            return nil
-        }
-        files = append(files, path)
-        return nil
-    })
+	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+		if info.IsDir() {
+			return nil
+		}
+		files = append(files, path)
+		return nil
+	})
 
-    if err != nil {
-        panic(err)
-    }
+	if err != nil {
+		panic(err)
+	}
 
-    return len(files), nil
+	return len(files), nil
 }
-
