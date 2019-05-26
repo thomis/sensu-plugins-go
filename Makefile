@@ -1,21 +1,16 @@
 BUILDOPT := -ldflags '-s -w'
 SOURCES  := $(wildcard */*.go)
 
-gom:
-	go get github.com/mattn/gom
-	gom install
+export GOOS=linux
+export GOARCH=amd64
 
-run:
-	gom run main.go ${ARGS}
-
-fmt:
-	@$(foreach FILE, $(SOURCES), gom exec goimports -w $(FILE);)
-
-build: fmt $(SOURCES)
-	@$(foreach FILE, $(SOURCES), echo $(FILE); gom build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
+build:
+	@$(foreach FILE, $(SOURCES), echo $(FILE); go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
 
 clean:
 	rm -f bin/*
+	rm sensu-checks-go*
 
-check_asset:
-	tar -cvzf sensu-check-plugins.tar.gz bin/check-*
+asset:
+	tar cvf - bin/* | gzip > sensu-checks-go.linux.amd64.tar.gz
+	sha512sum sensu-checks-go.linux.amd64.tar.gz > sensu-checks-go.linux.amd64.tar.gz.sha512

@@ -3,9 +3,4 @@
 .*.swp
 *#*
 .DS_Store
-vendor
-/_vendor
-/.vendor
-/bin/check-*
-/bin/metrics-*
-/bin/handler-*
+/bin

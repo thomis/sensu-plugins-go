@@ -46,7 +46,7 @@ func countProcess(pattern string) (int, error) {
 
 	for _, process := range processes {
 		if re.Match([]byte(process.Executable())) {
-			fmt.Printf(" - %s\n", process.Executable())
+			fmt.Printf(" - (%d) %s\n", process.Pid(), process.Executable())
 			count += 1
 		}
 	}
