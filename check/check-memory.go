@@ -41,6 +41,8 @@ func memoryUsage() (float64, float64, error) {
 	var (
 		memTotal     float64
 		memAvailable float64
+		memBuffers   float64
+		memCached    float64
 	)
 
 	contents, err := ioutil.ReadFile("/proc/meminfo")
@@ -63,11 +65,24 @@ func memoryUsage() (float64, float64, error) {
 			if err != nil {
 				return 0.0, 0.0, err
 			}
+		case stats[0] == "Buffers:":
+			memBuffers, err = strconv.ParseFloat(stats[1], 64)
+			if err != nil {
+				return 0.0, 0.0, err
+			}
+		case stats[0] == "Cached:":
+			memCached, err = strconv.ParseFloat(stats[1], 64)
+			if err != nil {
+				return 0.0, 0.0, err
+			}
 		}
 		if memTotal > 0.0 && memAvailable > 0.0 {
 			break
 		}
 	}
-
+	// Deal with systems that don't provide MemAvailable
+	if memAvailable == 0 && (memBuffers != 0 || memCached != 0) {
+		memAvailable = memBuffers + memCached
+	}
 	return memTotal / 1024.0, memAvailable / 1024.0, nil
 }
