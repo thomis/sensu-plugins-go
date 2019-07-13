@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"net/http"
 	"strconv"
 	"time"
@@ -13,15 +14,17 @@ func main() {
 		url      string
 		redirect bool
 		timeout  int
+		insecure bool
 	)
 
 	c := check.New("CheckHTTP")
 	c.Option.StringVarP(&url, "url", "u", "http://localhost/", "URL")
 	c.Option.BoolVarP(&redirect, "redirect", "r", false, "REDIRECT")
 	c.Option.IntVarP(&timeout, "timeout", "t", 15, "TIMEOUT")
+	c.Option.BoolVarP(&insecure, "insecure", "k", false, "INSECURE (skips peer certificate validation)")
 	c.Init()
 
-	status, err := statusCode(url, timeout)
+	status, err := statusCode(url, timeout, insecure)
 	if err != nil {
 		c.Error(err)
 	}
@@ -38,15 +41,19 @@ func main() {
 	}
 }
 
-func statusCode(url string, timeout int) (int, error) {
+func statusCode(url string, timeout int, insecure bool) (int, error) {
 	http.DefaultClient.Timeout = time.Duration(timeout) * time.Second
+
+	transport := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: insecure},
+	}
 
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return 0, err
 	}
 
-	response, err := http.DefaultTransport.RoundTrip(request)
+	response, err := transport.RoundTrip(request)
 	if err != nil {
 		return 0, err
 	}
