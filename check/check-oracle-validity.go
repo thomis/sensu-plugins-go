@@ -10,8 +10,6 @@ import (
 	"strings"
 	"time"
 
-	// "regexp"
-
 	ora "github.com/godror/godror"
 	"github.com/portertech/sensu-plugins-go/lib/check"
 )

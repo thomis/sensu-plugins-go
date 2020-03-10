@@ -15,16 +15,21 @@ func main() {
 		redirect bool
 		timeout  int
 		insecure bool
+		username string
+		password string
 	)
 
 	c := check.New("CheckHTTP")
 	c.Option.StringVarP(&url, "url", "u", "http://localhost/", "URL")
 	c.Option.BoolVarP(&redirect, "redirect", "r", false, "REDIRECT")
 	c.Option.IntVarP(&timeout, "timeout", "t", 15, "TIMEOUT")
+	c.Option.StringVarP(&username, "username", "", "", "Username for basic authentication")
+	c.Option.StringVarP(&password, "password", "", "", "Password for basic authentication")
 	c.Option.BoolVarP(&insecure, "insecure", "k", false, "INSECURE (skips peer certificate validation)")
+
 	c.Init()
 
-	status, err := statusCode(url, timeout, insecure)
+	status, err := statusCode(url, timeout, insecure, username, password)
 	if err != nil {
 		c.Error(err)
 	}
@@ -41,7 +46,7 @@ func main() {
 	}
 }
 
-func statusCode(url string, timeout int, insecure bool) (int, error) {
+func statusCode(url string, timeout int, insecure bool, username string, password string) (int, error) {
 	http.DefaultClient.Timeout = time.Duration(timeout) * time.Second
 
 	transport := &http.Transport{
@@ -51,6 +56,10 @@ func statusCode(url string, timeout int, insecure bool) (int, error) {
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return 0, err
+	}
+
+	if len(username) > 0 || len(password) > 0 {
+		request.SetBasicAuth(username, password)
 	}
 
 	response, err := transport.RoundTrip(request)
