@@ -1,6 +1,9 @@
 BUILDOPT := -ldflags '-s -w'
 SOURCES  := $(wildcard */*.go)
 
+# export GOOS=linux
+# export GOARCH=amd64
+
 build:
 	@$(foreach FILE, $(SOURCES), echo $(FILE); go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
 

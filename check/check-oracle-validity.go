@@ -116,7 +116,11 @@ func fileValidity(fileParams fileParams) (string, error) {
 
 func singleValidity(connection connection) (string, error) {
 	params := ora.ConnectionParams{
-		Username: connection.username, Password: connection.password, SID: connection.database, StandaloneConnection: true}
+		CommonParams: ora.CommonParams{
+			Username: connection.username,
+			Password: ora.NewPassword(connection.password),
+			Timezone: 		 time.UTC,
+			ConnectString: connection.database}}
 
 	db, err := sql.Open("godror", params.StringWithPassword())
 	if err != nil {
