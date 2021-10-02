@@ -1,4 +1,4 @@
-name: ci cleaner
+name: ci
 
 on:
   push:
@@ -24,9 +24,3 @@ jobs:
 
       - name: Build
         run: make
-
-      - name: Test
-        run: go test ./...
-
-      - name: Examine
-        run: go vet ./....
