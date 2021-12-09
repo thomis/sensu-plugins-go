@@ -47,17 +47,17 @@ func main() {
 
 func statusCode(url string, timeout int, insecure bool, username string, password string) (int, error) {
 	c := http.Client{
-		Timeout:   time.Duration(timeout) * time.Second,
+		Timeout: time.Duration(timeout) * time.Second,
 		Transport: &http.Transport{
 			ResponseHeaderTimeout: time.Duration(timeout) * time.Second,
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: insecure}}}
+			TLSClientConfig:       &tls.Config{InsecureSkipVerify: insecure}}}
 
 	request, err := http.NewRequest(http.MethodGet, url, http.NoBody)
 	if err != nil {
 		return 0, err
 	}
 
-	if len(username)	 > 0 || len(password) > 0 {
+	if len(username) > 0 || len(password) > 0 {
 		request.SetBasicAuth(username, password)
 	}
 

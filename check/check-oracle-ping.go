@@ -113,9 +113,9 @@ func filePing(fileParams fileParams) (string, error) {
 func singlePing(connection connection) (string, error) {
 	params := ora.ConnectionParams{
 		CommonParams: ora.CommonParams{
-			Username: connection.username,
-			Password: ora.NewPassword(connection.password),
-			Timezone: 		 time.UTC,
+			Username:      connection.username,
+			Password:      ora.NewPassword(connection.password),
+			Timezone:      time.UTC,
 			ConnectString: connection.database}}
 
 	db, err := sql.Open("godror", params.StringWithPassword())
