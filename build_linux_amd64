@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+VERSION=0.1.0
+NAME=sensu-plugins-go
+
+# Basline image
+docker build --force-rm --tag $NAME:$VERSION .
+
+# various options here
+case "$1" in
+  "c")
+    # get a bash shell in a running container with acutal source code
+    # ./bash c (like c for console)
+    docker run --rm -v $PWD/releases:/app/releases -it $NAME:$VERSION bash
+    exit 0;;
+  *)
+    # builds app with actual source code, find release in releases folder
+    docker run --rm -v $PWD/releases:/app/releases $NAME:$VERSION /bin/bash -c "source ~/.bashrc && make && make asset"
+    exit 0;;
+esac
