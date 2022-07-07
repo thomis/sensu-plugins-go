@@ -15,34 +15,34 @@ func main() {
 	uptime, _ := host.Uptime()
 
 	days := uptime / (60 * 60 * 24)
-  hours := (uptime - (days * 60 * 60 * 24)) / (60 * 60)
-  minutes := ((uptime - (days * 60 * 60 * 24))  -  (hours * 60 * 60)) / 60
-  seconds := uptime - (days * 60 * 60 * 24) - (hours * 60 * 60) - (minutes*60)
+	hours := (uptime - (days * 60 * 60 * 24)) / (60 * 60)
+	minutes := ((uptime - (days * 60 * 60 * 24)) - (hours * 60 * 60)) / 60
+	seconds := uptime - (days * 60 * 60 * 24) - (hours * 60 * 60) - (minutes * 60)
 
-  elements := []string{}
+	elements := []string{}
 
-  if days > 1 {
-	  elements = append(elements, fmt.Sprintf("%d days", days))
+	if days > 1 {
+		elements = append(elements, fmt.Sprintf("%d days", days))
 	}
 
 	if days == 1 {
-	  elements = append(elements, fmt.Sprintf("%d day", days))
+		elements = append(elements, fmt.Sprintf("%d day", days))
 	}
 
-  if hours > 1 {
-	  elements = append(elements, fmt.Sprintf("%d hours", hours))
+	if hours > 1 {
+		elements = append(elements, fmt.Sprintf("%d hours", hours))
 	}
 
 	if hours == 1 {
-	  elements = append(elements, fmt.Sprintf("%d hour", hours))
+		elements = append(elements, fmt.Sprintf("%d hour", hours))
 	}
 
 	if minutes > 1 {
-	  elements = append(elements, fmt.Sprintf("%d minutes", minutes))
+		elements = append(elements, fmt.Sprintf("%d minutes", minutes))
 	}
 
 	if minutes == 1 {
-	  elements = append(elements, fmt.Sprintf("%d minute", minutes))
+		elements = append(elements, fmt.Sprintf("%d minute", minutes))
 	}
 
 	if seconds == 1 {

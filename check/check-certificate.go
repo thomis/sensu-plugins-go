@@ -62,7 +62,7 @@ func main() {
 	days_left := cert.NotAfter.Sub(now).Hours() / 24
 	if now.Add(time.Duration(expiry) * 24 * time.Hour).After(cert.NotAfter) {
 		info := fmt.Sprintf("Certificate about to expire in less than %d days. Not After: %s (%0.1f days left)",
-			expiry, cert.NotAfter.Format("2006-01	-02 15:04:05")+" UTC",
+			expiry, cert.NotAfter.Format("2006-01-02 15:04:05")+" UTC",
 			days_left)
 		c.Warning(info)
 	}
