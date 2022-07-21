@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/bitly/go-simplejson v0.5.0
 	github.com/go-sql-driver/mysql v1.6.0
-	github.com/godror/godror v0.33.3
+	github.com/godror/godror v0.34.0
 	github.com/gomodule/redigo v1.8.9
 	github.com/hico-horiuchi/ohgibone v0.22.1
 	github.com/lib/pq v1.10.6
