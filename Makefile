@@ -50,5 +50,5 @@ clean_bin:
 clean_release:
 	@echo "\nCleaning releases..."
 	@echo "--------------------"
-	rm -r releases
+	rm -r -f releases
 	mkdir -p releases
