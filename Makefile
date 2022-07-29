@@ -1,7 +1,10 @@
 BUILDOPT := -ldflags '-s -w'
 SOURCES  := $(wildcard */*.go)
 
-build_all: clean_release test lint build_linux_amd64 build_darwin_amd64 build_darwin_arm64
+build: clean_bin
+	@echo "\nBuilding local..."
+	@echo "-----------------"
+	@$(foreach FILE, $(SOURCES), echo $(FILE); go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
 
 test:
 	@echo "\nAbout to test..."
@@ -12,11 +15,6 @@ lint:
 	@echo "\nAbout to lint..."
 	@echo "----------------"
 	@$(foreach FILE, $(SOURCES), echo $(FILE); staticcheck $(FILE);)
-
-build: clean_bin
-	@echo "\nBuilding local..."
-	@echo "-----------------"
-	@$(foreach FILE, $(SOURCES), echo $(FILE); go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
 
 build_linux_amd64: clean_bin
 	@echo "\nbuilding for linux.amd64..."
@@ -41,6 +39,8 @@ build_darwin_arm64: clean_bin
 		GOOS=darwin GOARCH=arm64 go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
 	tar cvf - bin/* | gzip > releases/sensu-checks-go.darwin.arm64.tar.gz
 	sha512sum releases/sensu-checks-go.darwin.arm64.tar.gz > releases/sensu-checks-go.darwin.arm64.tar.gz.sha512
+
+build_all: clean_release test lint build_linux_amd64 build_darwin_amd64 build_darwin_arm64
 
 clean_bin:
 	@echo "\nCleaning bin..."
