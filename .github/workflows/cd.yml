@@ -34,7 +34,7 @@ jobs:
 
       - name: Build all platforms
         run: |
-          make test lint build_linux_amd64
+          make clean_release test lint build_linux_amd64
 
       - name: Upload release for linux amd64
         uses: actions/upload-release-asset@v1
@@ -85,7 +85,7 @@ jobs:
 
       - name: Build all platforms
         run: |
-          make test lint
+          make clean_release test lint
           make build_darwin_amd64
           make build_darwin_arm64
 
