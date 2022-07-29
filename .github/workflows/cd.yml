@@ -85,6 +85,7 @@ jobs:
 
       - name: Build
         run: |
+          echo -e "#!/bin/sh\nshasum -a 512 $1" > /usr/local/bin/sha512sum && chmod +x /usr/local/bin/sha512sum
           make clean_release test lint
           make build_darwin_amd64
           make build_darwin_arm64
