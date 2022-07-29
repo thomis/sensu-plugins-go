@@ -32,7 +32,7 @@ jobs:
         run: |
           go install honnef.co/go/tools/cmd/staticcheck@latest
 
-      - name: Build all platforms
+      - name: Build
         run: |
           make clean_release test lint build_linux_amd64
 
@@ -60,9 +60,9 @@ jobs:
     name: Release for macOS
     runs-on: macos-latest
     env:
-      ORACLE_HOME: /opt/instantclient_19_8
-      LD_LIBRARY_PATH: /opt/instantclient_19_8
-      OCI_DIR: /opt/instantclient_19_8
+      ORACLE_HOME: ~/opt/instantclient_19_8
+      LD_LIBRARY_PATH: ~/opt/instantclient_19_8
+      OCI_DIR: ~/opt/instantclient_19_8
       NLS_LANG: AMERICAN_AMERICA.AL32UTF8
 
     steps:
@@ -73,7 +73,7 @@ jobs:
 
       - name: Install Oracle instant client
         run: |
-          mkdir -p /opt && cd /opt
+          mkdir -p ~/opt && cd ~/opt
           curl https://download.oracle.com/otn_software/mac/instantclient/198000/instantclient-basic-macos.x64-19.8.0.0.0dbru.zip --output instantclient.zip
           curl https://download.oracle.com/otn_software/mac/instantclient/198000/instantclient-sdk-macos.x64-19.8.0.0.0dbru.zip --output instantclient_sdk.zip
           unzip instantclient.zip
@@ -83,7 +83,7 @@ jobs:
         run: |
           go install honnef.co/go/tools/cmd/staticcheck@latest
 
-      - name: Build all platforms
+      - name: Build
         run: |
           make clean_release test lint
           make build_darwin_amd64
