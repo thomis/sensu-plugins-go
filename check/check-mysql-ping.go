@@ -50,6 +50,6 @@ func selectVersion(host string, port int, user string, password string, database
 		return "", err
 	}
 
-	re := regexp.MustCompile("([0-9\\.]+)")
+	re := regexp.MustCompile(`([0-9\.]+)`)
 	return re.FindStringSubmatch(info)[1], nil
 }

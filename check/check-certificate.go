@@ -44,7 +44,7 @@ func main() {
 
 	certs := conn.ConnectionState().PeerCertificates
 	if len(certs) == 0 {
-		c.Error(fmt.Errorf("Unable to find or retrieve certificates"))
+		c.Error(fmt.Errorf("unable to find or retrieve certificates"))
 	}
 
 	// check date validity

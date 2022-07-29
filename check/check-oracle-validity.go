@@ -103,7 +103,7 @@ func fileValidity(fileParams fileParams) (string, error) {
 				details = append(details, fmt.Sprintf("- %s (%s@%s): %s", task.connection.label, task.connection.username, task.connection.database, task.err.Error()))
 			}
 		case <-timeout:
-			return "", fmt.Errorf("Timeout reached while testing [%d] connections", total)
+			return "", fmt.Errorf("timeout reached while testing [%d] connections", total)
 		}
 	}
 
@@ -148,7 +148,7 @@ func singleValidity(connection connection) (string, error) {
 	rows, err := db.QueryContext(ctx, stmt)
 	if err != nil {
 		if ctx.Err() != nil {
-			return "", fmt.Errorf("Timeout reached")
+			return "", fmt.Errorf("timeout reached")
 		}
 		return "", extractOracleError(err)
 	}
@@ -166,7 +166,7 @@ func singleValidity(connection connection) (string, error) {
 	}
 
 	if objectsInvalid > 0 {
-		return "", fmt.Errorf("Invalid objects: %d\n%s", objectsInvalid, strings.Join(buffer, "\n"))
+		return "", fmt.Errorf("invalid objects: %d\n%s", objectsInvalid, strings.Join(buffer, "\n"))
 	}
 
 	return "All objects are valid", nil
@@ -203,7 +203,7 @@ func parseConnectionsFromFile(fileParams fileParams) (*[]connection, error) {
 
 		result := reConnection.FindSubmatch([]byte(line))
 		if len(result) == 0 {
-			return &connections, fmt.Errorf("Connection string on line [%d] does not match pattern [label,username/password@database]", i)
+			return &connections, fmt.Errorf("connection string on line [%d] does not match pattern [label,username/password@database]", i)
 		}
 
 		connection := connection{

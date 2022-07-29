@@ -49,6 +49,6 @@ func selectVersion(host string, port int, user string, password string, database
 		return "", err
 	}
 
-	re := regexp.MustCompile("PostgreSQL ([0-9\\.]+)")
+	re := regexp.MustCompile(`PostgreSQL ([0-9\.]+)`)
 	return re.FindStringSubmatch(info)[1], nil
 }

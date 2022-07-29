@@ -57,6 +57,10 @@ func main() {
 			}
 
 			f_size, err := strconv.ParseFloat(u[2], 64)
+			if err != nil {
+				c.Error(err)
+			}
+
 			if f_size*1024 >= minimum*1073741824 {
 				f_crit = adj_percent(f_size, float64(crit), magic, normal)
 				f_warn = adj_percent(f_size, float64(warn), magic, normal)

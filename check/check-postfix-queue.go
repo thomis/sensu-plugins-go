@@ -24,7 +24,7 @@ func main() {
 	queueDir := fmt.Sprintf("/var/spool/postfix/%s", queue)
 
 	if _, err := os.Stat(queueDir); os.IsNotExist(err) || os.IsPermission(err) {
-		c.Error(fmt.Errorf("Cannot access queue directory %s: %v", queueDir, err))
+		c.Error(fmt.Errorf("cannot access queue directory %s: %v", queueDir, err))
 	}
 
 	queueLength, err := mailQueue(queueDir)

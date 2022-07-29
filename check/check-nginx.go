@@ -86,7 +86,7 @@ func nginxStatus(url string, timeout int) (int64, error) {
 	}
 
 	if response.StatusCode != 200 {
-		return -1, fmt.Errorf("Received HTTP status code %v from %s", response.StatusCode, url)
+		return -1, fmt.Errorf("received HTTP status code %v from %s", response.StatusCode, url)
 	}
 
 	body, err := ioutil.ReadAll(response.Body)
@@ -104,6 +104,9 @@ func nginxStatus(url string, timeout int) (int64, error) {
 
 	lines := strings.Split(string(body), "\n")
 	connections, err := strconv.ParseInt(strings.Fields(lines[0])[2], 10, 64)
+	if err != nil {
+		return -1, err
+	}
 
 	return connections, nil
 }
