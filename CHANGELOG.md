@@ -30,5 +30,5 @@ With manual build pipeline.
 
 ### Added
 
-- Initial version based on fork from [nixwiz/sensu-plugins-go]https://github.com/nixwiz/sensu-plugins-go
+- Initial version based on fork from [nixwiz/sensu-plugins-go](https://github.com/nixwiz/sensu-plugins-go)
 
