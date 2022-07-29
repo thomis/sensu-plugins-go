@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - Use of GitHub actions for CI/CD
+- Use of Dependabot to keep dependencies up to date
 - Use of test and linter steps
 - Support for 3 platforms (linux.amd64, darvin.arm64, darvin.amd64, but currently no oracle support for darwin.arm64)
 - Use of Code Climate features
