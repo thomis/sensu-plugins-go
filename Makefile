@@ -24,7 +24,7 @@ build_linux_amd64: clean_bin
 	@$(foreach FILE, $(SOURCES), echo $(FILE); \
 		GOOS=linux GOARCH=amd64 go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
 	tar cvf - bin/* | gzip > releases/sensu-checks-go.linux.amd64.tar.gz
-	sha512sum releases/sensu-checks-go.linux.amd64.tar.gz > releases/sensu-checks-go.linux.amd64.tar.gz.sha512
+	(cd releases && sha512sum sensu-checks-go.linux.amd64.tar.gz > sensu-checks-go.linux.amd64.tar.gz.sha512)
 
 build_darwin_amd64: clean_bin
 	@echo "\nbuilding for darwin.amd64..."
@@ -32,7 +32,7 @@ build_darwin_amd64: clean_bin
 	@$(foreach FILE, $(SOURCES), echo $(FILE); \
 		GOOS=darwin GOARCH=amd64 go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
 	tar cvf - bin/* | gzip > releases/sensu-checks-go.darwin.amd64.tar.gz
-	sha512sum releases/sensu-checks-go.darwin.amd64.tar.gz > releases/sensu-checks-go.darwin.amd64.tar.gz.sha512
+	(cd releases && sha512sum sensu-checks-go.darwin.amd64.tar.gz > sensu-checks-go.darwin.amd64.tar.gz.sha512)
 
 build_darwin_arm64: clean_bin
 	@echo "\nbuilding for darwin.arm64..."
@@ -40,7 +40,7 @@ build_darwin_arm64: clean_bin
 	@$(foreach FILE, $(SOURCES_NO_ORACLE), echo $(FILE); \
 		GOOS=darwin GOARCH=arm64 go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
 	tar cvf - bin/* | gzip > releases/sensu-checks-go.darwin.arm64.tar.gz
-	sha512sum releases/sensu-checks-go.darwin.arm64.tar.gz > releases/sensu-checks-go.darwin.arm64.tar.gz.sha512
+	(cd releases && sha512sum sensu-checks-go.darwin.arm64.tar.gz > sensu-checks-go.darwin.arm64.tar.gz.sha512)
 
 build_all: clean_release test lint build_linux_amd64 build_darwin_amd64 build_darwin_arm64
 
