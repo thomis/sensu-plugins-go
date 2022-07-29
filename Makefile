@@ -14,7 +14,8 @@ lint:
 	@$(foreach FILE, $(SOURCES), echo $(FILE); staticcheck $(FILE);)
 
 build: clean_bin
-	@echo "\nbuilding for local platform"
+	@echo "\nBuilding local..."
+	@echo "-----------------"
 	@$(foreach FILE, $(SOURCES), echo $(FILE); go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
 
 build_linux_amd64: clean_bin
