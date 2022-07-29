@@ -1,5 +1,7 @@
 BUILDOPT := -ldflags '-s -w'
 SOURCES  := $(wildcard */*.go)
+# there is currently no instant client for darwin arm64
+SOURCES_NO_ORACLE := $(filter-out $(wildcard */*oracle*), $(SOURCES))
 
 build: clean_bin
 	@echo "\nBuilding local..."
@@ -35,7 +37,7 @@ build_darwin_amd64: clean_bin
 build_darwin_arm64: clean_bin
 	@echo "\nbuilding for darwin.arm64..."
 	@echo "---------------------------"
-	@$(foreach FILE, $(SOURCES), echo $(FILE); \
+	@$(foreach FILE, $(SOURCES_NO_ORACLE), echo $(FILE); \
 		GOOS=darwin GOARCH=arm64 go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
 	tar cvf - bin/* | gzip > releases/sensu-checks-go.darwin.arm64.tar.gz
 	sha512sum releases/sensu-checks-go.darwin.arm64.tar.gz > releases/sensu-checks-go.darwin.arm64.tar.gz.sha512
