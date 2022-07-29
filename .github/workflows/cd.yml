@@ -29,7 +29,9 @@ jobs:
           unzip instantclient_sdk.zip
 
       - name: Build
-        run: make test lint build
+        run: |
+          go install honnef.co/go/tools/cmd/staticcheck@latest
+          make test lint build
 
       - name: Upload release for linux amd64
         uses: actions/upload-release-asset@v1
