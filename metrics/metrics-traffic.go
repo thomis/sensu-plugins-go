@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -63,7 +62,7 @@ func getTraffics() ([]int64, error) {
 			continue
 		}
 
-		rxBytes, err := ioutil.ReadFile(ifpath + "/statistics/rx_bytes")
+		rxBytes, err := os.ReadFile(ifpath + "/statistics/rx_bytes")
 		if err != nil {
 			return []int64{}, err
 		}
@@ -72,7 +71,7 @@ func getTraffics() ([]int64, error) {
 			return []int64{}, err
 		}
 
-		txBytes, err := ioutil.ReadFile(ifpath + "/statistics/tx_bytes")
+		txBytes, err := os.ReadFile(ifpath + "/statistics/tx_bytes")
 		if err != nil {
 			return []int64{}, err
 		}

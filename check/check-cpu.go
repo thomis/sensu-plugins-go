@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -68,7 +68,7 @@ func cpuUsage(sleep int) ([]float64, error) {
 }
 
 func getStats() ([]float64, error) {
-	contents, err := ioutil.ReadFile("/proc/stat")
+	contents, err := os.ReadFile("/proc/stat")
 	if err != nil {
 		return []float64{}, err
 	}

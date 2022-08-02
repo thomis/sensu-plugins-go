@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"os"
+	"io"
+	"net/http"
 	"strconv"
 	"strings"
 	"syscall"
@@ -47,7 +47,7 @@ func main() {
 
 func checkProcessRunning(pidFile string) (bool, error) {
 
-	pidLine, err := ioutil.ReadFile(pidFile)
+	pidLine, err := os.ReadFile(pidFile)
 	if err != nil {
 		return false, fmt.Errorf("failed to read PID file %s, error: %s", pidFile, err)
 	}
@@ -89,7 +89,7 @@ func nginxStatus(url string, timeout int) (int64, error) {
 		return -1, fmt.Errorf("received HTTP status code %v from %s", response.StatusCode, url)
 	}
 
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return -1, err
 	}

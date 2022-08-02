@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"strconv"
 	"strings"
 
@@ -45,7 +45,7 @@ func memoryUsage() (float64, float64, error) {
 		memCached    float64
 	)
 
-	contents, err := ioutil.ReadFile("/proc/meminfo")
+	contents, err := os.ReadFile("/proc/meminfo")
 	if err != nil {
 		return 0.0, 0.0, err
 	}
