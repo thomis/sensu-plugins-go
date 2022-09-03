@@ -11,7 +11,7 @@ require (
 	github.com/lib/pq v1.10.6
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/portertech/sensu-plugins-go v0.0.0-20180413042030-c511828943c5
-	github.com/shirou/gopsutil/v3 v3.22.7
+	github.com/shirou/gopsutil/v3 v3.22.8
 	github.com/spf13/pflag v1.0.5
 )
 
