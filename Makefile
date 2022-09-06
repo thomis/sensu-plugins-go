@@ -13,10 +13,20 @@ test:
 	@echo "----------------"
 	@$(foreach FILE, $(SOURCES), echo $(FILE); go test $(FILE);)
 
+format:
+	@echo "\nAbout to format..."
+	@echo "---------------------"
+	@$(foreach FILE, $(SOURCES), echo $(FILE); go fmt $(FILE);)
+
 lint:
 	@echo "\nAbout to lint..."
 	@echo "----------------"
 	@$(foreach FILE, $(SOURCES), echo $(FILE); staticcheck $(FILE);)
+
+vul:
+	@echo "\nAbout to check for vulnerabilities..."
+	@echo "----------------"
+	@$(foreach FILE, $(SOURCES), echo $(FILE); govulncheck $(FILE);)
 
 build_linux_amd64: clean_bin
 	@echo "\nbuilding for linux.amd64..."
@@ -42,7 +52,7 @@ build_darwin_arm64: clean_bin
 	tar cvf - bin/* | gzip > releases/sensu-checks-go.darwin.arm64.tar.gz
 	(cd releases && sha512sum sensu-checks-go.darwin.arm64.tar.gz > sensu-checks-go.darwin.arm64.tar.gz.sha512)
 
-build_all: clean_release test lint build_linux_amd64 build_darwin_amd64 build_darwin_arm64
+build_all: clean_release form test format lint vul build_linux_amd64 build_darwin_amd64 build_darwin_arm64
 
 clean_bin:
 	@echo "\nCleaning bin..."

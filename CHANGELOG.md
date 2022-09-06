@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.3.0] - 2022-09-03
 
 ### Changed
+- Update golang 1.19.1
+- Linting, testing and formatting
+
+## [0.3.0] - 2022-09-03
+
+### Changed
 - Update dependencies
 
 ## [0.2.0] - 2022-07-29
