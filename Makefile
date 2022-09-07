@@ -2,6 +2,7 @@ BUILDOPT := -ldflags '-s -w'
 SOURCES  := $(wildcard */*.go)
 # there is currently no instant client for darwin arm64
 SOURCES_NO_ORACLE := $(filter-out $(wildcard */*oracle*), $(SOURCES))
+BINARIES := $(wildcard bin/*)
 
 build: clean_bin
 	@echo "\nBuilding local..."
@@ -25,8 +26,8 @@ lint:
 
 vul:
 	@echo "\nAbout to check for vulnerabilities..."
-	@echo "----------------"
-	@$(foreach FILE, $(SOURCES), echo $(FILE); govulncheck $(FILE);)
+	@echo "--------------------------------------"
+	@$(foreach FILE, $(BINARIES), echo $(FILE); govulncheck $(FILE);)
 
 build_linux_amd64: clean_bin
 	@echo "\nbuilding for linux.amd64..."

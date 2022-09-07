@@ -14,7 +14,7 @@ import (
 )
 
 type request struct {
-	url      string
+	url string
 	// redirect bool # unused and detected by linter
 	timeout  time.Duration
 	insecure bool

@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"io"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"syscall"
