@@ -5,11 +5,11 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.3.0] - 2022-09-03
+## [0.4.0] - 2022-09-07
 
 ### Changed
 - Update golang 1.19.1
-- Linting, testing and formatting
+- Linting, testing, formatting and vulnerability checking
 
 ## [0.3.0] - 2022-09-03
 
