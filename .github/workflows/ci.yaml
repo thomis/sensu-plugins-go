@@ -38,12 +38,13 @@ jobs:
           unzip instantclient.zip
           unzip instantclient_sdk.zip
 
+      - name: Install go tools for linting and vulnerability check
+        run: go install honnef.co/go/tools/cmd/staticcheck@latest
+        run: install golang.org/x/vuln/cmd/govulncheck@latest
+
       - name: Build
-        run: |
-          go install honnef.co/go/tools/cmd/staticcheck@latest
-          make format test lint build
+        run: make format test lint build
 
       - name: Check vulnerabilities
-        run: |
-          go install golang.org/x/vuln/cmd/govulncheck@latest
-          make vul
+        # expected to have binaries build before
+        run: make vul

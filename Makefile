@@ -53,7 +53,7 @@ build_darwin_arm64: clean_bin
 	tar cvf - bin/* | gzip > releases/sensu-checks-go.darwin.arm64.tar.gz
 	(cd releases && sha512sum sensu-checks-go.darwin.arm64.tar.gz > sensu-checks-go.darwin.arm64.tar.gz.sha512)
 
-build_all: clean_release form test format lint build_linux_amd64 build_darwin_amd64 build_darwin_arm64 vul
+build_all: clean_release format test lint build_linux_amd64 build_darwin_amd64 build_darwin_arm64
 
 clean_bin:
 	@echo "\nCleaning bin..."
