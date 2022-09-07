@@ -41,5 +41,9 @@ jobs:
       - name: Build
         run: |
           go install honnef.co/go/tools/cmd/staticcheck@latest
+          make format test lint build
+
+      - name: Check vulnerabilities
+        run: |
           go install golang.org/x/vuln/cmd/govulncheck@latest
-          make format test lint build vul
+          make vul
