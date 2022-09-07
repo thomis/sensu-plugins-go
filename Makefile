@@ -7,7 +7,7 @@ BINARIES := $(wildcard bin/*)
 build: clean_bin
 	@echo "\nBuilding local..."
 	@echo "-----------------"
-	@$(foreach FILE, $(SOURCES), echo $(FILE); go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
+	@$(foreach FILE, $(SOURCES), echo $(FILE); go build -o bin/`basename $(FILE) .go` $(FILE);)
 
 test:
 	@echo "\nAbout to test..."
