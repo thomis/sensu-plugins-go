@@ -17,7 +17,7 @@ test:
 format:
 	@echo "\nAbout to format..."
 	@echo "---------------------"
-	@$(foreach FILE, $(SOURCES), echo $(FILE); go fmt $(FILE);)
+	@$(foreach FILE, $(SOURCES), echo $(FILE); go fmt $(FILE) -e;)
 
 lint:
 	@echo "\nAbout to lint..."
