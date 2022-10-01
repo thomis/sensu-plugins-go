@@ -1,4 +1,4 @@
-BUILDOPT := -ldflags '-s -w'
+	BUILDOPT := -ldflags '-s -w'
 SOURCES  := $(wildcard */*.go)
 # there is currently no instant client for darwin arm64
 SOURCES_NO_ORACLE := $(filter-out $(wildcard */*oracle*), $(SOURCES))
