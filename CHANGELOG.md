@@ -5,6 +5,11 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.8.0] - 2022-11-03
+
+### Changed
+- Update to go 1.19.3
+
 ## [0.7.0] - 2022-10-06
 
 ### Changed

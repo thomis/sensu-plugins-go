@@ -1,4 +1,4 @@
-	BUILDOPT := -ldflags '-s -w'
+BUILDOPT := -ldflags '-s -w'
 SOURCES  := $(wildcard */*.go)
 # there is currently no instant client for darwin arm64
 SOURCES_NO_ORACLE := $(filter-out $(wildcard */*oracle*), $(SOURCES))
@@ -20,11 +20,13 @@ format:
 	@$(foreach FILE, $(SOURCES), echo $(FILE); go fmt $(FILE);)
 
 lint:
+	# install: go install honnef.co/go/tools/cmd/staticcheck@latest
 	@echo "\nAbout to lint..."
 	@echo "----------------"
 	@$(foreach FILE, $(SOURCES), echo $(FILE); staticcheck $(FILE);)
 
 vul:
+	# install: go install golang.org/x/vuln/cmd/govulncheck@latest
 	@echo "\nAbout to check for vulnerabilities..."
 	@echo "--------------------------------------"
 	@$(foreach FILE, $(BINARIES), echo $(FILE); govulncheck $(FILE);)
