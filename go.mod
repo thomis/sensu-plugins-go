@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/bitly/go-simplejson v0.5.0
 	github.com/go-sql-driver/mysql v1.6.0
-	github.com/godror/godror v0.34.0
+	github.com/godror/godror v0.35.0
 	github.com/gomodule/redigo v1.8.9
 	github.com/hico-horiuchi/ohgibone v0.22.1
 	github.com/lib/pq v1.10.7
@@ -28,5 +28,5 @@ require (
 	github.com/tklauser/numcpus v0.5.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+	google.golang.org/protobuf v1.28.1 // indirect
 )
