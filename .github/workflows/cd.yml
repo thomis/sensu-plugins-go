@@ -84,7 +84,7 @@ jobs:
             releases/sensu-checks-go.darwin.amd64.tar.gz
             releases/sensu-checks-go.darwin.amd64.tar.gz.sha512
 
-      - name: Upload release for darwin amd64
+      - name: Upload release for darwin arm64
         uses: softprops/action-gh-release@v1
         with:
           files: |
