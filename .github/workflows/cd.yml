@@ -9,9 +9,9 @@ jobs:
     name: Release for Linux
     runs-on: ubuntu-latest
     env:
-      ORACLE_HOME: /opt/instantclient_21_7
-      LD_LIBRARY_PATH: /opt/instantclient_21_7
-      OCI_DIR: /opt/instantclient_21_7
+      ORACLE_HOME: /opt/instantclient_21_8
+      LD_LIBRARY_PATH: /opt/instantclient_21_8
+      OCI_DIR: /opt/instantclient_21_8
       NLS_LANG: AMERICAN_AMERICA.AL32UTF8
 
     steps:
@@ -23,8 +23,8 @@ jobs:
       - name: Install Oracle instant client
         run: |
           mkdir -p /opt && cd /opt
-          curl https://download.oracle.com/otn_software/linux/instantclient/217000/instantclient-basic-linux.x64-21.7.0.0.0dbru.zip --output instantclient.zip
-          curl https://download.oracle.com/otn_software/linux/instantclient/217000/instantclient-sdk-linux.x64-21.7.0.0.0dbru.zip --output instantclient_sdk.zip
+          curl https://download.oracle.com/otn_software/linux/instantclient/218000/instantclient-basic-linux.x64-21.8.0.0.0dbru.zip --output instantclient.zip
+          curl https://download.oracle.com/otn_software/linux/instantclient/218000/instantclient-sdk-linux.x64-21.8.0.0.0dbru.zip --output instantclient_sdk.zip
           unzip instantclient.zip
           unzip instantclient_sdk.zip
 
@@ -37,24 +37,11 @@ jobs:
           make clean_release test lint build_linux_amd64
 
       - name: Upload release for linux amd64
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./releases/sensu-checks-go.linux.amd64.tar.gz
-          asset_name: sensu-checks-go.linux.amd64.tar.gz
-          asset_content_type: application/gzip
-
-      - name: Upload checksum for linux amd64
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./releases/sensu-checks-go.linux.amd64.tar.gz.sha512
-          asset_name: sensu-checks-go.linux.amd64.tar.gz.sha512
-          asset_content_type: text/plain
+          files: |
+            releases/sensu-checks-go.linux.amd64.tar.gz
+            releases/sensu-checks-go.linux.amd64.tar.gz.sha512
 
   macOS:
     name: Release for macOS
@@ -91,41 +78,15 @@ jobs:
           make build_darwin_arm64
 
       - name: Upload release for darwin amd64
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./releases/sensu-checks-go.darwin.amd64.tar.gz
-          asset_name: sensu-checks-go.darwin.amd64.tar.gz
-          asset_content_type: application/gzip
+          files: |
+            releases/sensu-checks-go.darwin.amd64.tar.gz
+            releases/sensu-checks-go.darwin.amd64.tar.gz.sha512
 
-      - name: Upload checksum for darwin amd64
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload release for darwin amd64
+        uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./releases/sensu-checks-go.darwin.amd64.tar.gz.sha512
-          asset_name: sensu-checks-go.darwin.amd64.tar.gz.sha512
-          asset_content_type: text/plain
-
-      - name: Upload release for darwin arm64
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./releases/sensu-checks-go.darwin.arm64.tar.gz
-          asset_name: sensu-checks-go.darwin.arm64.tar.gz
-          asset_content_type: application/gzip
-
-      - name: Upload checksum for darwin arm64
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./releases/sensu-checks-go.darwin.arm64.tar.gz.sha512
-          asset_name: sensu-checks-go.darwin.arm64.tar.gz.sha512
-          asset_content_type: text/plain
+          files: |
+            releases/sensu-checks-go.darwin.arm64.tar.gz
+            releases/sensu-checks-go.darwin.arm64.tar.gz.sha512
