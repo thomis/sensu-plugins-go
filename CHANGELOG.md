@@ -5,6 +5,12 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.16.0] - 2023-02-14
+
+### Changed
+- Update dependencies
+- Update to golang 1.20.1
+
 ## [0.15.0] - 2023-02-11
 
 ### Changed
