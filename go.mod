@@ -21,7 +21,7 @@ require (
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
-	github.com/godror/knownpb v0.1.0 // indirect
+	github.com/godror/knownpb v0.1.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/pty v1.1.8 // indirect
@@ -32,8 +32,8 @@ require (
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/pborman/getopt v1.1.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20221212215047-62379fc7944b // indirect
-	github.com/psampaz/go-mod-outdated v0.8.0 // indirect
-	github.com/rivo/uniseg v0.4.3 // indirect
+	github.com/psampaz/go-mod-outdated v0.9.0 // indirect
+	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.11 // indirect
 	github.com/tklauser/numcpus v0.6.0 // indirect
