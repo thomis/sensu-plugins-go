@@ -2,7 +2,7 @@ BUILDOPT := -ldflags '-s -w'
 SOURCES  := $(wildcard */*.go)
 # there is currently no instant client for darwin arm64
 SOURCES_NO_ORACLE := $(filter-out $(wildcard */*oracle*), $(SOURCES))
-BINARIES := $(wildcard ./bin/*)
+BINARIES := $(wildcard $(shell pwd)/bin/*)
 
 build: clean_bin
 	@echo "\nBuilding local..."
