@@ -49,4 +49,4 @@ jobs:
 
       - name: Check vulnerabilities
         # expected to have binaries build before
-        run: go env && make vul
+        run: make vul
