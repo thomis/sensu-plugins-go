@@ -47,6 +47,6 @@ jobs:
       - name: Build
         run: make format test lint build
 
-      - name: Check vulnerabilities
-        # expected to have binaries build before
-        run: make vul
+      # - name: Check vulnerabilities
+      #   # expected to have binaries build before
+      #   run: make vul

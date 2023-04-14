@@ -29,7 +29,7 @@ vul:
 	# install: go install golang.org/x/vuln/cmd/govulncheck@latest
 	@echo "\nAbout to check for vulnerabilities..."
 	@echo "--------------------------------------"
-	@$(foreach FILE, $(BINARIES), echo $(FILE); GOROOT=$(shell pwd)/bin && govulncheck $(FILE);)
+	@$(foreach FILE, $(BINARIES), echo $(FILE); govulncheck $(FILE);)
 
 build_linux_amd64: clean_bin
 	@echo "\nbuilding for linux.amd64..."
