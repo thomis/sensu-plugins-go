@@ -5,10 +5,11 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.24.0] - 2023-04-14
+## [0.24.0] - 2023-04-16
 
 ### Changed
 - Update dependencies
+- Add linux arm version
 
 ## [0.23.0] - 2023-04-07
 

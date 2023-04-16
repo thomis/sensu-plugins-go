@@ -35,7 +35,9 @@ jobs:
 
       - name: Build
         run: |
-          make clean_release test lint build_linux_amd64
+          make clean_release test lint
+          make build_linux_amd64
+          make build_linux_arm64
 
       - name: Upload release for linux amd64
         uses: softprops/action-gh-release@v1
@@ -43,6 +45,13 @@ jobs:
           files: |
             releases/sensu-checks-go.linux.amd64.tar.gz
             releases/sensu-checks-go.linux.amd64.tar.gz.sha512
+
+      - name: Upload release for linux arm64
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            releases/sensu-checks-go.linux.arm64.tar.gz
+            releases/sensu-checks-go.linux.arm64.tar.gz.sha512
 
   macOS:
     name: Release for macOS
