@@ -5,6 +5,11 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.28.0] - 2023-07-11
+
+### Changed
+- Update dependencies
+
 ## [0.27.0] - 2023-06-06
 
 ### Changed
@@ -163,4 +168,3 @@ With manual build pipeline.
 ### Added
 
 - Initial version based on fork from [nixwiz/sensu-plugins-go](https://github.com/nixwiz/sensu-plugins-go)
-
