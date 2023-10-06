@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	ora "github.com/godror/godror"
+	"github.com/godror/godror"
 	"github.com/portertech/sensu-plugins-go/lib/check"
 )
 
@@ -111,12 +111,11 @@ func filePing(fileParams fileParams) (string, error) {
 }
 
 func singlePing(connection connection) (string, error) {
-	params := ora.ConnectionParams{
-		CommonParams: ora.CommonParams{
-			Username:      connection.username,
-			Password:      ora.NewPassword(connection.password),
-			Timezone:      time.UTC,
-			ConnectString: connection.database}}
+	params := godror.ConnectionParams{}
+	params.Username = connection.username
+	params.Password = godror.NewPassword(connection.password)
+	params.Timezone = time.UTC
+	params.ConnectString = connection.database
 
 	db, err := sql.Open("godror", params.StringWithPassword())
 	if err != nil {
@@ -189,7 +188,7 @@ func extractOracleError(err error) error {
 		return err
 	}
 
-	oraErr, isOraErr := ora.AsOraErr(err)
+	oraErr, isOraErr := godror.AsOraErr(err)
 	if isOraErr {
 		return fmt.Errorf("ORA-%d: %s", oraErr.Code(), oraErr.Message())
 	}
