@@ -1,5 +1,5 @@
 BUILDOPT := -ldflags '-s -w'
-SOURCES  := $(wildcard */*.go)
+SOURCES  := $(wildcard cmd/*/*.go)
 # there is currently no instant client for darwin arm64
 SOURCES_NO_ORACLE := $(filter-out $(wildcard */*oracle*), $(SOURCES))
 BINARIES := $(wildcard bin/*)
@@ -29,7 +29,7 @@ vul:
 	# install: go install golang.org/x/vuln/cmd/govulncheck@latest
 	@echo "\nAbout to check for vulnerabilities..."
 	@echo "--------------------------------------"
-	@$(foreach FILE, $(BINARIES), echo $(FILE); govulncheck $(FILE);)
+	govulncheck ./...
 
 build_linux_amd64: clean_bin
 	@echo "\nbuilding for linux.amd64..."
@@ -63,7 +63,7 @@ build_darwin_arm64: clean_bin
 	tar cvf - bin/* | gzip > releases/sensu-checks-go.darwin.arm64.tar.gz
 	(cd releases && sha512sum sensu-checks-go.darwin.arm64.tar.gz > sensu-checks-go.darwin.arm64.tar.gz.sha512)
 
-build_all: clean_release format test lint build_linux_amd64 build_linux_arm64 build_darwin_amd64 build_darwin_arm64
+build_all: clean_release format test lint vul build_linux_amd64 build_linux_arm64 build_darwin_amd64 build_darwin_arm64
 
 clean_bin:
 	@echo "\nCleaning bin..."
