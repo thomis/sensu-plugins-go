@@ -42,7 +42,7 @@ build_linux_amd64: clean_bin
 build_linux_arm64: clean_bin
 	@echo "\nbuilding for linux.arm64..."
 	@echo "---------------------------"
-	@$(foreach FILE, $(SOURCES), echo $(FILE); \
+	@$(foreach FILE, $(SOURCES_NO_ORACLE), echo $(FILE); \
 		GOOS=linux GOARCH=arm64 go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
 	tar cvf - bin/* | gzip > releases/sensu-checks-go.linux.arm64.tar.gz
 	(cd releases && sha512sum sensu-checks-go.linux.arm64.tar.gz > sensu-checks-go.linux.arm64.tar.gz.sha512)
