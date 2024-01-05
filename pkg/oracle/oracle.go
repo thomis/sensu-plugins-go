@@ -7,6 +7,8 @@ import (
 	"regexp"
 	"fmt"
 	"strings"
+
+	"github.com/godror/godror"
 )
 
 type FileParams struct {
@@ -69,4 +71,17 @@ func ParseConnectionsFromFile(fileParams FileParams) (*[]Connection, error) {
 	}
 
 	return &connections, nil
+}
+
+func ExtractOracleError(err error) error {
+	if err == nil {
+		return err
+	}
+
+	oraErr, isOraErr := godror.AsOraErr(err)
+	if isOraErr {
+		return fmt.Errorf("ORA-%d: %s", oraErr.Code(), oraErr.Message())
+	}
+
+	return err
 }

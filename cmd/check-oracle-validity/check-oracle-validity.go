@@ -106,7 +106,7 @@ func singleValidity(connection oracle.Connection) (string, error) {
 
 	db, err := sql.Open("godror", params.StringWithPassword())
 	if err != nil {
-		return "", extractOracleError(err)
+		return "", oracle.ExtractOracleError(err)
 	}
 	defer db.Close()
 
@@ -132,14 +132,14 @@ func singleValidity(connection oracle.Connection) (string, error) {
 		if ctx.Err() != nil {
 			return "", fmt.Errorf("timeout reached")
 		}
-		return "", extractOracleError(err)
+		return "", oracle.ExtractOracleError(err)
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		err := rows.Scan(&objectType, &objectName)
 		if err != nil {
-			return "", extractOracleError((err))
+			return "", oracle.ExtractOracleError((err))
 		}
 
 		objectsInvalid++
@@ -152,17 +152,4 @@ func singleValidity(connection oracle.Connection) (string, error) {
 	}
 
 	return "All objects are valid", nil
-}
-
-func extractOracleError(err error) error {
-	if err == nil {
-		return err
-	}
-
-	oraErr, isOraErr := godror.AsOraErr(err)
-	if isOraErr {
-		return fmt.Errorf("ORA-%d: %s", oraErr.Code(), oraErr.Message())
-	}
-
-	return err
 }

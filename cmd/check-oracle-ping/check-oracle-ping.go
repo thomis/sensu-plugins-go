@@ -104,7 +104,7 @@ func singlePing(connection oracle.Connection) (string, error) {
 
 	db, err := sql.Open("godror", params.StringWithPassword())
 	if err != nil {
-		return "", extractOracleError(err)
+		return "", oracle.ExtractOracleError(err)
 	}
 	defer db.Close()
 
@@ -116,21 +116,8 @@ func singlePing(connection oracle.Connection) (string, error) {
 		if ctx.Err() != nil {
 			return "", fmt.Errorf("timeout reached")
 		}
-		return "", extractOracleError(err)
+		return "", oracle.ExtractOracleError(err)
 	}
 
 	return "Connection is pingable", nil
-}
-
-func extractOracleError(err error) error {
-	if err == nil {
-		return err
-	}
-
-	oraErr, isOraErr := godror.AsOraErr(err)
-	if isOraErr {
-		return fmt.Errorf("ORA-%d: %s", oraErr.Code(), oraErr.Message())
-	}
-
-	return err
 }
