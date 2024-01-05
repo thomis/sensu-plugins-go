@@ -35,7 +35,7 @@ jobs:
 
       - name: Build
         run: |
-          make clean_release test lint
+          make clean_release test lint vul
           make build_linux_amd64
           make build_linux_arm64
 
@@ -66,7 +66,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.21.4'
+          go-version: '1.21.5'
           check-latest: true
 
       - name: Install Oracle instant client
@@ -84,7 +84,7 @@ jobs:
       - name: Build
         run: |
           echo -e "#!/bin/sh\nshasum -a 512 $1" > /usr/local/bin/sha512sum && chmod +x /usr/local/bin/sha512sum
-          make clean_release test lint
+          make clean_release test lint vul
           make build_darwin_amd64
           make build_darwin_arm64
 

@@ -45,7 +45,7 @@ jobs:
           go install golang.org/x/vuln/cmd/govulncheck@latest
 
       - name: Build
-        run: make format test lint build
+        run: make format test lint vul build
 
       # - name: Check vulnerabilities
       #   # expected to have binaries build before
