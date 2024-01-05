@@ -1,7 +1,7 @@
 BUILDOPT := -ldflags '-s -w'
 SOURCES  := $(wildcard cmd/*/*.go)
-# there is currently no instant client for darwin arm64
-SOURCES_NO_ORACLE := $(filter-out $(wildcard */*oracle*), $(SOURCES))
+# there is currently no instant client for darwin arm64, therefore we exclude oracle based files
+SOURCES_NO_ORACLE := $(wildcard $(shell find cmd -type f -name "*.go" -not -path "*oracle*"))
 BINARIES := $(wildcard bin/*)
 
 build: clean_bin
