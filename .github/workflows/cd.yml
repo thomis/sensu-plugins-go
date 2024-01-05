@@ -33,6 +33,10 @@ jobs:
         run: |
           go install honnef.co/go/tools/cmd/staticcheck@latest
 
+      - name: Install govulncheck
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@latest
+
       - name: Build
         run: |
           make clean_release test lint vul
@@ -80,6 +84,10 @@ jobs:
       - name: Install staticcheck
         run: |
           go install honnef.co/go/tools/cmd/staticcheck@latest
+
+      - name: Install govulncheck
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@latest
 
       - name: Build
         run: |
