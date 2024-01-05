@@ -6,6 +6,14 @@ import (
 	"strings"
 )
 
+type Connection struct {
+	Host     string
+	Port     int
+	Database string
+	User     string
+	Password string
+}
+
 func GetStats() ([]float64, error) {
 	contents, err := os.ReadFile("/proc/stat")
 	if err != nil {

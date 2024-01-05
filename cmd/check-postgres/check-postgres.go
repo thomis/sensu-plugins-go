@@ -7,26 +7,23 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/thomis/sensu-plugins-go/pkg/check"
+	"github.com/thomis/sensu-plugins-go/pkg/common"
 )
 
 func main() {
 	var (
-		host     string
-		port     int
-		database string
-		user     string
-		password string
+		connection common.Connection
 	)
 
 	c := check.New("CheckPostgres")
-	c.Option.StringVarP(&host, "host", "h", "localhost", "HOST")
-	c.Option.IntVarP(&port, "port", "P", 5432, "PORT")
-	c.Option.StringVarP(&user, "user", "u", "", "USER")
-	c.Option.StringVarP(&password, "password", "p", "", "PASSWORD")
-	c.Option.StringVarP(&database, "database", "d", "test", "DATABASE")
+	c.Option.StringVarP(&connection.Host, "host", "h", "localhost", "HOST")
+	c.Option.IntVarP(&connection.Port, "port", "P", 5432, "PORT")
+	c.Option.StringVarP(&connection.User, "user", "u", "", "USER")
+	c.Option.StringVarP(&connection.Password, "password", "p", "", "PASSWORD")
+	c.Option.StringVarP(&connection.Database, "database", "d", "test", "DATABASE")
 	c.Init()
 
-	version, err := selectVersion(host, port, user, password, database)
+	version, err := selectVersion(connection)
 	if err != nil {
 		c.Error(err)
 	}
@@ -34,10 +31,15 @@ func main() {
 	c.Ok(fmt.Sprint("Server version ", version))
 }
 
-func selectVersion(host string, port int, user string, password string, database string) (string, error) {
+func selectVersion(connection common.Connection) (string, error) {
 	var info string
 
-	source := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, database)
+	source := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+		connection.Host,
+		connection.Port,
+		connection.User,
+		connection.Password,
+		connection.Database)
 	db, err := sql.Open("postgres", source)
 	if err != nil {
 		return "", err

@@ -8,26 +8,23 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/thomis/sensu-plugins-go/pkg/check"
+	"github.com/thomis/sensu-plugins-go/pkg/common"
 )
 
 func main() {
 	var (
-		host     string
-		port     int
-		database string
-		user     string
-		password string
+		connection common.Connection
 	)
 
 	c := check.New("CheckMySQLPing")
-	c.Option.StringVarP(&host, "host", "h", "localhost", "MySQL host to connect to")
-	c.Option.IntVarP(&port, "port", "P", 3306, "MySQL tcp port to connect to")
-	c.Option.StringVarP(&user, "user", "u", os.Getenv("MYSQL_USER"), "MySQL User")
-	c.Option.StringVarP(&password, "password", "p", os.Getenv("MYSQL_PASSWORD"), "MySQL user password")
-	c.Option.StringVarP(&database, "database", "d", "mysql", "MySQL database")
+	c.Option.StringVarP(&connection.Host, "host", "h", "localhost", "MySQL host to connect to")
+	c.Option.IntVarP(&connection.Port, "port", "P", 3306, "MySQL tcp port to connect to")
+	c.Option.StringVarP(&connection.User, "user", "u", os.Getenv("MYSQL_USER"), "MySQL User")
+	c.Option.StringVarP(&connection.Password, "password", "p", os.Getenv("MYSQL_PASSWORD"), "MySQL user password")
+	c.Option.StringVarP(&connection.Database, "database", "d", "mysql", "MySQL database")
 	c.Init()
 
-	version, err := selectVersion(host, port, user, password, database)
+	version, err := selectVersion(connection)
 	if err != nil {
 		c.Error(err)
 	}
@@ -35,10 +32,15 @@ func main() {
 	c.Ok(fmt.Sprint("Server version ", version))
 }
 
-func selectVersion(host string, port int, user string, password string, database string) (string, error) {
+func selectVersion(connection common.Connection) (string, error) {
 	var info string
 
-	source := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", user, password, host, port, database)
+	source := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s",
+		connection.User,
+		connection.Password,
+		connection.Host,
+		connection.Port,
+		connection.Database)
 	db, err := sql.Open("mysql", source)
 	if err != nil {
 		return "", err
