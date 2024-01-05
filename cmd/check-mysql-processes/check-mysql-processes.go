@@ -9,14 +9,12 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/thomis/sensu-plugins-go/pkg/check"
+	"github.com/thomis/sensu-plugins-go/pkg/common"
 )
 
 func main() {
 	var (
-		host     string
-		port     int
-		user     string
-		password string
+		connection common.Connection
 		critical string
 		warning  string
 		critMin  int64
@@ -26,11 +24,13 @@ func main() {
 		err      error
 	)
 
+	connection.Database = "mysql"
+
 	c := check.New("CheckMySQLProceses")
-	c.Option.StringVarP(&host, "host", "h", "localhost", "MySQL host to connect to")
-	c.Option.IntVarP(&port, "port", "P", 3306, "MySQL tcp port to connect to")
-	c.Option.StringVarP(&user, "user", "u", os.Getenv("MYSQL_USER"), "MySQL User")
-	c.Option.StringVarP(&password, "password", "p", os.Getenv("MYSQL_PASSWORD"), "MySQL user password")
+	c.Option.StringVarP(&connection.Host, "host", "h", "localhost", "MySQL host to connect to")
+	c.Option.IntVarP(&connection.Port, "port", "P", 3306, "MySQL tcp port to connect to")
+	c.Option.StringVarP(&connection.User, "user", "u", os.Getenv("MYSQL_USER"), "MySQL User")
+	c.Option.StringVarP(&connection.Password, "password", "p", os.Getenv("MYSQL_PASSWORD"), "MySQL user password")
 	c.Option.StringVarP(&critical, "critical", "c", "", "Critical min:max threshold, max is optional")
 	c.Option.StringVarP(&warning, "warning", "w", "", "Warning min:max threshold, max is optional")
 	c.Init()
@@ -69,7 +69,7 @@ func main() {
 		c.Error(fmt.Errorf("warning argument %s invalid, min %d is greater than max %d", warning, warnMin, warnMax))
 	}
 
-	processCount, err := selectProcessCount(host, port, user, password, "mysql")
+	processCount, err := selectProcessCount(connection)
 	if err != nil {
 		c.Error(err)
 	}
@@ -88,10 +88,10 @@ func main() {
 	}
 }
 
-func selectProcessCount(host string, port int, user string, password string, database string) (int64, error) {
+func selectProcessCount(connection common.Connection) (int64, error) {
 	var count int64
 
-	source := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", user, password, host, port, database)
+	source := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", connection.User, connection.Password, connection.Host, connection.Port, connection.Database)
 	db, err := sql.Open("mysql", source)
 	if err != nil {
 		return 0, err
