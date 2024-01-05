@@ -2,7 +2,7 @@ package handler
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 
@@ -32,7 +32,7 @@ func New(path string) *handlerStruct {
 }
 
 func (h *handlerStruct) readEvent() {
-	bytes, err := ioutil.ReadAll(os.Stdin)
+	bytes, err := io.ReadAll(os.Stdin)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,7 +41,7 @@ func (h *handlerStruct) readEvent() {
 }
 
 func (h *handlerStruct) loadConfig(path string) {
-	bytes, err := ioutil.ReadFile(path)
+	bytes, err := os.ReadFile(path)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -12,18 +12,18 @@ build: clean_bin
 test:
 	@echo "\nAbout to test..."
 	@echo "----------------"
-	@$(foreach FILE, $(SOURCES), echo $(FILE); go test $(FILE);)
+	go test ./...
 
 format:
 	@echo "\nAbout to format..."
 	@echo "---------------------"
-	@$(foreach FILE, $(SOURCES), echo $(FILE); go fmt $(FILE);)
+	go fmt ./...
 
 lint:
 	# install: go install honnef.co/go/tools/cmd/staticcheck@latest
 	@echo "\nAbout to lint..."
 	@echo "----------------"
-	@$(foreach FILE, $(SOURCES), echo $(FILE); staticcheck $(FILE);)
+	staticcheck ./...
 
 vul:
 	# install: go install golang.org/x/vuln/cmd/govulncheck@latest
