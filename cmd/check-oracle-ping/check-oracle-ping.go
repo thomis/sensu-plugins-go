@@ -1,34 +1,19 @@
 package main
 
 import (
-	"bufio"
 	"context"
 	"database/sql"
 	"fmt"
-	"os"
-	"regexp"
 	"strings"
 	"time"
 
 	"github.com/godror/godror"
 	"github.com/thomis/sensu-plugins-go/pkg/check"
+	"github.com/thomis/sensu-plugins-go/pkg/oracle"
 )
 
-type fileParams struct {
-	file    string
-	timeout time.Duration
-}
-
-type connection struct {
-	label    string
-	username string
-	password string
-	database string
-	timeout  time.Duration
-}
-
 type task struct {
-	connection *connection
+	connection *oracle.Connection
 	err        error
 }
 
@@ -54,9 +39,9 @@ func main() {
 	c.Init()
 
 	if len(file) > 0 {
-		response, err = filePing(fileParams{file: file, timeout: timeout})
+		response, err = filePing(oracle.FileParams{File: file, Timeout: timeout})
 	} else {
-		connection := connection{username: username, password: password, database: database, timeout: timeout}
+		connection := oracle.Connection{Username: username, Password: password, Database: database, Timeout: timeout}
 		response, err = singlePing(connection)
 	}
 
@@ -68,15 +53,15 @@ func main() {
 	c.Ok(response)
 }
 
-func filePing(fileParams fileParams) (string, error) {
-	connections, err := parseConnectionsFromFile(fileParams)
+func filePing(fileParams oracle.FileParams) (string, error) {
+	connections, err := oracle.ParseConnectionsFromFile(fileParams)
 	if err != nil {
 		return "", err
 	}
 
 	channel := make(chan (task))
 	for _, c := range *connections {
-		go func(c connection) {
+		go func(c oracle.Connection) {
 			_, err := singlePing(c)
 
 			channel <- task{
@@ -87,7 +72,7 @@ func filePing(fileParams fileParams) (string, error) {
 
 	total := len(*connections)
 	success := 0
-	timeout := time.After(fileParams.timeout)
+	timeout := time.After(fileParams.Timeout)
 	details := []string{}
 
 	for i := 0; i < total; i++ {
@@ -96,7 +81,7 @@ func filePing(fileParams fileParams) (string, error) {
 			if task.err == nil {
 				success++
 			} else {
-				details = append(details, fmt.Sprintf("- %s (%s@%s): %s", task.connection.label, task.connection.username, task.connection.database, task.err.Error()))
+				details = append(details, fmt.Sprintf("- %s (%s@%s): %s", task.connection.Label, task.connection.Username, task.connection.Database, task.err.Error()))
 			}
 		case <-timeout:
 			return "", fmt.Errorf("timeout reached while testing [%d] connections", total)
@@ -110,12 +95,12 @@ func filePing(fileParams fileParams) (string, error) {
 	return fmt.Sprintf("%d/%d connections are pingable", success, total), nil
 }
 
-func singlePing(connection connection) (string, error) {
+func singlePing(connection oracle.Connection) (string, error) {
 	params := godror.ConnectionParams{}
-	params.Username = connection.username
-	params.Password = godror.NewPassword(connection.password)
+	params.Username = connection.Username
+	params.Password = godror.NewPassword(connection.Password)
 	params.Timezone = time.UTC
-	params.ConnectString = connection.database
+	params.ConnectString = connection.Database
 
 	db, err := sql.Open("godror", params.StringWithPassword())
 	if err != nil {
@@ -123,7 +108,7 @@ func singlePing(connection connection) (string, error) {
 	}
 	defer db.Close()
 
-	ctx, cancel := context.WithTimeout(context.Background(), connection.timeout)
+	ctx, cancel := context.WithTimeout(context.Background(), connection.Timeout)
 	defer cancel()
 
 	err = db.PingContext(ctx)
@@ -135,52 +120,6 @@ func singlePing(connection connection) (string, error) {
 	}
 
 	return "Connection is pingable", nil
-}
-
-func parseConnectionsFromFile(fileParams fileParams) (*[]connection, error) {
-	connections := []connection{}
-
-	readFile, err := os.Open(fileParams.file)
-	if err != nil {
-		return &connections, err
-	}
-	defer readFile.Close()
-
-	fileScanner := bufio.NewScanner(readFile)
-	fileScanner.Split(bufio.ScanLines)
-
-	reConnection := regexp.MustCompile(`(.+),(.+)/(.+)@(.+)`)
-
-	i := 0
-	for fileScanner.Scan() {
-		i++
-		line := strings.TrimSpace(fileScanner.Text())
-
-		// empty line
-		if len(line) == 0 {
-			continue
-		}
-
-		// comment line
-		if line[0] == '#' {
-			continue
-		}
-
-		result := reConnection.FindSubmatch([]byte(line))
-		if len(result) == 0 {
-			return &connections, fmt.Errorf("connection string on line [%d] does not match pattern [label,username/password@database]", i)
-		}
-
-		connection := connection{
-			label:    string(result[1]),
-			username: string(result[2]),
-			password: string(result[3]),
-			database: string(result[4]),
-			timeout:  fileParams.timeout}
-		connections = append(connections, connection)
-	}
-
-	return &connections, nil
 }
 
 func extractOracleError(err error) error {
