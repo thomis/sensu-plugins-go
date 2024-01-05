@@ -2,12 +2,10 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"strconv"
-	"strings"
 	"time"
 
 	"github.com/thomis/sensu-plugins-go/pkg/check"
+	"github.com/thomis/sensu-plugins-go/pkg/common"
 )
 
 func main() {
@@ -42,14 +40,14 @@ func main() {
 func cpuUsage(sleep int) ([]float64, error) {
 	var totalDiff float64
 
-	beforeStats, err := getStats()
+	beforeStats, err := common.GetStats()
 	if err != nil {
 		return []float64{}, err
 	}
 
 	time.Sleep(time.Duration(sleep) * time.Second)
 
-	afterStats, err := getStats()
+	afterStats, err := common.GetStats()
 	if err != nil {
 		return []float64{}, err
 	}
@@ -67,25 +65,6 @@ func cpuUsage(sleep int) ([]float64, error) {
 	return usageStats, nil
 }
 
-func getStats() ([]float64, error) {
-	contents, err := os.ReadFile("/proc/stat")
-	if err != nil {
-		return []float64{}, err
-	}
-
-	line := strings.Split(string(contents), "\n")[0]
-	stats := strings.Fields(line)[1:]
-
-	result := make([]float64, len(stats))
-	for i := range stats {
-		result[i], err = strconv.ParseFloat(stats[i], 64)
-		if err != nil {
-			return result, err
-		}
-	}
-
-	return result, nil
-}
 func formatOutput(usageStats []float64, warn int, crit int) (string, string) {
 
 	var other float64
