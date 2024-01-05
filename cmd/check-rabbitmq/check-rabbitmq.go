@@ -15,26 +15,30 @@ type alivenessStruct struct {
 	Status string
 }
 
+type connection struct {
+	Host string
+	Port int
+	Vhost string
+	User string
+	Password string
+	Timeout int
+}
+
 func main() {
 	var (
-		host     string
-		port     int
-		vhost    string
-		user     string
-		password string
-		timeout  int
+		connection connection
 	)
 
 	c := check.New("CheckRabbitMQ")
-	c.Option.StringVarP(&host, "host", "h", "localhost", "HOST")
-	c.Option.IntVarP(&port, "port", "P", 15672, "PORT")
-	c.Option.StringVarP(&vhost, "vhost", "v", "%2F", "VHOST")
-	c.Option.StringVarP(&user, "user", "u", "guest", "USER")
-	c.Option.StringVarP(&password, "password", "p", "guest", "PASSWORD")
-	c.Option.IntVarP(&timeout, "timeout", "t", 10, "TIMEOUT")
+	c.Option.StringVarP(&connection.Host, "host", "h", "localhost", "HOST")
+	c.Option.IntVarP(&connection.Port, "port", "P", 15672, "PORT")
+	c.Option.StringVarP(&connection.Vhost, "vhost", "v", "%2F", "VHOST")
+	c.Option.StringVarP(&connection.User, "user", "u", "guest", "USER")
+	c.Option.StringVarP(&connection.Password, "password", "p", "guest", "PASSWORD")
+	c.Option.IntVarP(&connection.Timeout, "timeout", "t", 10, "TIMEOUT")
 	c.Init()
 
-	status, err := alivenessTest(host, port, vhost, user, password, timeout)
+	status, err := alivenessTest(connection)
 	if err != nil {
 		c.Error(err)
 	}
@@ -47,22 +51,22 @@ func main() {
 	}
 }
 
-func alivenessTest(host string, port int, vhost string, user string, password string, timeout int) (string, error) {
+func alivenessTest(connection connection) (string, error) {
 	var aliveness alivenessStruct
-	http.DefaultClient.Timeout = time.Duration(timeout) * time.Second
+	http.DefaultClient.Timeout = time.Duration(connection.Timeout) * time.Second
 
 	request := &http.Request{
 		Method: "GET",
 		URL: &url.URL{
-			Host:   host + ":" + strconv.Itoa(port),
+			Host:   connection.Host + ":" + strconv.Itoa(connection.Port),
 			Scheme: "http",
-			Opaque: "/api/aliveness-test/" + vhost,
+			Opaque: "/api/aliveness-test/" + connection.Vhost,
 		},
 		Header: http.Header{
 			"User-Agent": {"godoc-example/0.1"},
 		},
 	}
-	request.SetBasicAuth(user, password)
+	request.SetBasicAuth(connection.User, connection.Password)
 
 	response, err := http.DefaultClient.Do(request)
 	if err != nil {
