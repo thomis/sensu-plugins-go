@@ -15,13 +15,13 @@ import (
 func main() {
 	var (
 		connection common.Connection
-		critical string
-		warning  string
-		critMin  int64
-		critMax  int64
-		warnMin  int64
-		warnMax  int64
-		err      error
+		critical   string
+		warning    string
+		critMin    int64
+		critMax    int64
+		warnMin    int64
+		warnMax    int64
+		err        error
 	)
 
 	connection.Database = "mysql"

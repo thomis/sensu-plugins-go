@@ -1,12 +1,12 @@
 package oracle
 
 import (
-	"os"
-	"time"
 	"bufio"
-	"regexp"
 	"fmt"
+	"os"
+	"regexp"
 	"strings"
+	"time"
 
 	"github.com/godror/godror"
 )
@@ -18,11 +18,11 @@ type FileParams struct {
 }
 
 type Connection struct {
-	Label    string
-	Username string
-	Password string
-	Database string
-	Timeout  time.Duration
+	Label        string
+	Username     string
+	Password     string
+	Database     string
+	Timeout      time.Duration
 	ExcludeTypes []string
 }
 
@@ -61,11 +61,11 @@ func ParseConnectionsFromFile(fileParams FileParams) (*[]Connection, error) {
 		}
 
 		connection := Connection{
-			Label:    string(result[1]),
-			Username: string(result[2]),
-			Password: string(result[3]),
-			Database: string(result[4]),
-			Timeout:  fileParams.Timeout,
+			Label:        string(result[1]),
+			Username:     string(result[2]),
+			Password:     string(result[3]),
+			Database:     string(result[4]),
+			Timeout:      fileParams.Timeout,
 			ExcludeTypes: fileParams.ExcludeTypes}
 		connections = append(connections, connection)
 	}

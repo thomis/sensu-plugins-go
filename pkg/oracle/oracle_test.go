@@ -21,35 +21,35 @@ func setup(tb testing.TB) func(tb testing.TB) {
 }
 
 func TestParseConnectionsFromFile(t *testing.T) {
-		teardown := setup(t)
-		defer teardown(t)
+	teardown := setup(t)
+	defer teardown(t)
 
-		fileParams := FileParams{
-			File: ConnectionFilename}
+	fileParams := FileParams{
+		File: ConnectionFilename}
 
-		connections, err := ParseConnectionsFromFile(fileParams)
-		assert.Nil(t, err)
-		assert.Equal(t, len(*connections), 1)
-		connection := (*connections)[0]
-		assert.Equal(t, connection.Label, "label")
-		assert.Equal(t, connection.Username, "username")
-		assert.Equal(t, connection.Password, "password")
-		assert.Equal(t, connection.Database, "database")
+	connections, err := ParseConnectionsFromFile(fileParams)
+	assert.Nil(t, err)
+	assert.Equal(t, len(*connections), 1)
+	connection := (*connections)[0]
+	assert.Equal(t, connection.Label, "label")
+	assert.Equal(t, connection.Username, "username")
+	assert.Equal(t, connection.Password, "password")
+	assert.Equal(t, connection.Database, "database")
 }
 
 func TestParseConnectionsFromNoFile(t *testing.T) {
-		teardown := setup(t)
-		defer teardown(t)
+	teardown := setup(t)
+	defer teardown(t)
 
-		fileParams := FileParams{
-			File: ""}
+	fileParams := FileParams{
+		File: ""}
 
-		connections, err := ParseConnectionsFromFile(fileParams)
+	connections, err := ParseConnectionsFromFile(fileParams)
 
-		assert.NotNil(t, err)
+	assert.NotNil(t, err)
 
-		noConnections := []Connection{}
-		assert.Equal(t, connections, &noConnections)
+	noConnections := []Connection{}
+	assert.Equal(t, connections, &noConnections)
 }
 
 func setupInvalidFile(tb testing.TB) func(tb testing.TB) {
@@ -62,17 +62,17 @@ func setupInvalidFile(tb testing.TB) func(tb testing.TB) {
 }
 
 func TestParseConnectionsFromFileInvalidFile(t *testing.T) {
-		teardown := setupInvalidFile(t)
-		defer teardown(t)
+	teardown := setupInvalidFile(t)
+	defer teardown(t)
 
-		fileParams := FileParams{
-			File: ConnectionFilename2}
+	fileParams := FileParams{
+		File: ConnectionFilename2}
 
-		connections, err := ParseConnectionsFromFile(fileParams)
+	connections, err := ParseConnectionsFromFile(fileParams)
 
-		assert.NotNil(t, err)
-		noConnections := []Connection{}
-		assert.Equal(t, connections, &noConnections)
+	assert.NotNil(t, err)
+	noConnections := []Connection{}
+	assert.Equal(t, connections, &noConnections)
 }
 
 func TestExtractOracleErrorWhenNil(t *testing.T) {

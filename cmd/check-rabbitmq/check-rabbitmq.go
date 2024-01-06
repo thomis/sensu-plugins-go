@@ -16,12 +16,12 @@ type alivenessStruct struct {
 }
 
 type connection struct {
-	Host string
-	Port int
-	Vhost string
-	User string
+	Host     string
+	Port     int
+	Vhost    string
+	User     string
 	Password string
-	Timeout int
+	Timeout  int
 }
 
 func main() {

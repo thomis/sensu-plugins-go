@@ -12,10 +12,10 @@ import (
 )
 
 type item struct {
-	Host string
-	Port int
+	Host    string
+	Port    int
 	Timeout int64
-	Expiry int64
+	Expiry  int64
 }
 
 func main() {

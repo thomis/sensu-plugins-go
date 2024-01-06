@@ -3,8 +3,8 @@ package main
 import (
 	"time"
 
-	"github.com/thomis/sensu-plugins-go/pkg/metrics"
 	"github.com/thomis/sensu-plugins-go/pkg/common"
+	"github.com/thomis/sensu-plugins-go/pkg/metrics"
 )
 
 func main() {

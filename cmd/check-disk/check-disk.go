@@ -10,41 +10,45 @@ import (
 	"github.com/thomis/sensu-plugins-go/pkg/check"
 )
 
+type input struct {
+	Warn          int
+	Crit          int
+	Normal        float64
+	Magic         float64
+	Minimum       float64
+	FstypeExclude string
+	MountExclude  string
+	Path          string
+}
+
 func main() {
 	var (
-		warn            int
-		crit            int
-		fstype_exclude  string
+		input input
 		fstype_excludes []string
-		mount_exclude   string
 		mount_excludes  []string
-		normal          float64
-		magic           float64
-		minimum         float64
-		path            string
-		f_warn          float64
-		f_crit          float64
-		warnMnt         []string
-		critMnt         []string
-		perf            []string
-		perfs           string
+		f_warn  float64
+		f_crit  float64
+		warnMnt []string
+		critMnt []string
+		perf    []string
+		perfs   string
 	)
 
 	c := check.New("CheckDisk")
-	c.Option.IntVarP(&warn, "warn", "w", 80, "Warning percentage (greater than or equal to) threshold")
-	c.Option.IntVarP(&crit, "crit", "c", 100, "Critical percentage (greater than or equal to) threshold")
-	c.Option.Float64VarP(&magic, "magic", "m", 1.0, "Magic factor to adjust thresholds.  Example: 0.9")
-	c.Option.Float64VarP(&normal, "normal", "n", 20, "\"Normal\" size in GB, thresholds are not adjusted for filesystems of exactly this size, levels are reduced for smaller file systems and raised for larger filesystems")
-	c.Option.Float64VarP(&minimum, "minimum", "l", 100, "Minimum size in GB, before applying magic adjustment")
-	c.Option.StringVarP(&fstype_exclude, "exclude", "x", "", "Comma separated list of file system types to exclude")
-	c.Option.StringVarP(&mount_exclude, "ignore", "i", "", "Comma separated list of mount points to ignore")
-	c.Option.StringVarP(&path, "path", "p", "", "Limit check to specified path")
+	c.Option.IntVarP(&input.Warn, "warn", "w", 80, "Warning percentage (greater than or equal to) threshold")
+	c.Option.IntVarP(&input.Crit, "crit", "c", 100, "Critical percentage (greater than or equal to) threshold")
+	c.Option.Float64VarP(&input.Magic, "magic", "m", 1.0, "Magic factor to adjust thresholds.  Example: 0.9")
+	c.Option.Float64VarP(&input.Normal, "normal", "n", 20, "\"Normal\" size in GB, thresholds are not adjusted for filesystems of exactly this size, levels are reduced for smaller file systems and raised for larger filesystems")
+	c.Option.Float64VarP(&input.Minimum, "minimum", "l", 100, "Minimum size in GB, before applying magic adjustment")
+	c.Option.StringVarP(&input.FstypeExclude, "exclude", "x", "", "Comma separated list of file system types to exclude")
+	c.Option.StringVarP(&input.MountExclude, "ignore", "i", "", "Comma separated list of mount points to ignore")
+	c.Option.StringVarP(&input.Path, "path", "p", "", "Limit check to specified path")
 	c.Init()
 
-	fstype_excludes = strings.Split(fstype_exclude, ",")
-	mount_excludes = strings.Split(mount_exclude, ",")
+	fstype_excludes = strings.Split(input.FstypeExclude, ",")
+	mount_excludes = strings.Split(input.MountExclude, ",")
 
-	usage, err := diskUsage(path)
+	usage, err := diskUsage(input.Path)
 	if err != nil {
 		c.Error(err)
 	}
@@ -61,12 +65,12 @@ func main() {
 				c.Error(err)
 			}
 
-			if f_size*1024 >= minimum*1073741824 {
-				f_crit = adj_percent(f_size, float64(crit), magic, normal)
-				f_warn = adj_percent(f_size, float64(warn), magic, normal)
+			if f_size*1024 >= input.Minimum*1073741824 {
+				f_crit = adjPercent(f_size, float64(input.Crit), input.Magic, input.Normal)
+				f_warn = adjPercent(f_size, float64(input.Warn), input.Magic, input.Normal)
 			} else {
-				f_crit = float64(crit)
-				f_warn = float64(warn)
+				f_crit = float64(input.Crit)
+				f_warn = float64(input.Warn)
 			}
 			switch {
 			case cap >= f_crit:
@@ -123,7 +127,8 @@ func Contains(a []string, x string) bool {
 	}
 	return false
 }
-func adj_percent(size float64, percent float64, magic float64, normal float64) float64 {
+
+func adjPercent(size float64, percent float64, magic float64, normal float64) float64 {
 	hsize := (size / (1024.0 * 1024.0)) / normal
 	felt := math.Pow(hsize, magic)
 	scale := felt / hsize
