@@ -20,6 +20,7 @@ type session struct {
 	CritMax    int64
 	WarnMin    int64
 	WarnMax    int64
+	ProcessCount int64
 	Check      *check.CheckStruct
 }
 
@@ -66,23 +67,12 @@ func main() {
 		session.Check.Error(fmt.Errorf("warning argument %s invalid, min %d is greater than max %d", session.Warning, session.WarnMin, session.WarnMax))
 	}
 
-	processCount, err := selectProcessCount(session.Connection)
+	session.ProcessCount, err = selectProcessCount(session.Connection)
 	if err != nil {
 		session.Check.Error(err)
 	}
 
-	switch {
-	case session.CritMax > 0 && processCount >= session.CritMax:
-		session.Check.Critical(fmt.Sprintf("%d MySQL processes exceed threshold of %d | mysql_processes=%d;%s;%s;0", processCount, session.CritMax, processCount, session.Warning, session.Critical))
-	case processCount <= session.CritMin:
-		session.Check.Critical(fmt.Sprintf("%d MySQL processes are below threshold of %d | mysql_processes=%d;%s;%s;0", processCount, session.CritMin, processCount, session.Warning, session.Critical))
-	case session.WarnMax > 0 && processCount >= session.WarnMax:
-		session.Check.Warning(fmt.Sprintf("%d MySQL processes exceed threshold of %d | mysql_processes=%d;%s;%s;0", processCount, session.WarnMax, processCount, session.Warning, session.Critical))
-	case processCount <= session.WarnMin:
-		session.Check.Warning(fmt.Sprintf("%d MySQL processes are below threshold of %d | mysql_processes=%d;%s;%s;0", processCount, session.WarnMin, processCount, session.Warning, session.Critical))
-	default:
-		session.Check.Ok(fmt.Sprintf("MySQL process Count %d | mysql_processes=%d;%s;%s;0", processCount, processCount, session.Warning, session.Critical))
-	}
+	session.report()
 }
 
 func (s *session) handleArguments() {
@@ -94,6 +84,21 @@ func (s *session) handleArguments() {
 	s.Check.Option.StringVarP(&s.Critical, "critical", "c", "", "Critical min:max threshold, max is optional")
 	s.Check.Option.StringVarP(&s.Warning, "warning", "w", "", "Warning min:max threshold, max is optional")
 	s.Check.Init()
+}
+
+func (s *session) report() {
+	switch {
+	case s.CritMax > 0 && s.ProcessCount >= s.CritMax:
+		s.Check.Critical(fmt.Sprintf("%d MySQL processes exceed threshold of %d | mysql_processes=%d;%s;%s;0", s.ProcessCount, s.CritMax, s.ProcessCount, s.Warning, s.Critical))
+	case s.ProcessCount <= s.CritMin:
+		s.Check.Critical(fmt.Sprintf("%d MySQL processes are below threshold of %d | mysql_processes=%d;%s;%s;0", s.ProcessCount, s.CritMin, s.ProcessCount, s.Warning, s.Critical))
+	case s.WarnMax > 0 && s.ProcessCount >= s.WarnMax:
+		s.Check.Warning(fmt.Sprintf("%d MySQL processes exceed threshold of %d | mysql_processes=%d;%s;%s;0", s.ProcessCount, s.WarnMax, s.ProcessCount, s.Warning, s.Critical))
+	case s.ProcessCount <= s.WarnMin:
+		s.Check.Warning(fmt.Sprintf("%d MySQL processes are below threshold of %d | mysql_processes=%d;%s;%s;0", s.ProcessCount, s.WarnMin, s.ProcessCount, s.Warning, s.Critical))
+	default:
+		s.Check.Ok(fmt.Sprintf("MySQL process Count %d | mysql_processes=%d;%s;%s;0", s.ProcessCount, s.ProcessCount, s.Warning, s.Critical))
+	}
 }
 
 func selectProcessCount(connection common.Connection) (int64, error) {
