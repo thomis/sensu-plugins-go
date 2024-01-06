@@ -21,40 +21,42 @@ type input struct {
 	Path          string
 }
 
+type session struct {
+	Input input
+	FstypeExcludes []string
+	MountExcludes  []string
+	FWarn  float64
+	FCrit  float64
+	WarnMnt []string
+	CritMnt []string
+	Perf    []string
+	Perfs   string
+}
+
 func main() {
-	var (
-		input input
-		fstype_excludes []string
-		mount_excludes  []string
-		f_warn  float64
-		f_crit  float64
-		warnMnt []string
-		critMnt []string
-		perf    []string
-		perfs   string
-	)
+	var session session
 
 	c := check.New("CheckDisk")
-	c.Option.IntVarP(&input.Warn, "warn", "w", 80, "Warning percentage (greater than or equal to) threshold")
-	c.Option.IntVarP(&input.Crit, "crit", "c", 100, "Critical percentage (greater than or equal to) threshold")
-	c.Option.Float64VarP(&input.Magic, "magic", "m", 1.0, "Magic factor to adjust thresholds.  Example: 0.9")
-	c.Option.Float64VarP(&input.Normal, "normal", "n", 20, "\"Normal\" size in GB, thresholds are not adjusted for filesystems of exactly this size, levels are reduced for smaller file systems and raised for larger filesystems")
-	c.Option.Float64VarP(&input.Minimum, "minimum", "l", 100, "Minimum size in GB, before applying magic adjustment")
-	c.Option.StringVarP(&input.FstypeExclude, "exclude", "x", "", "Comma separated list of file system types to exclude")
-	c.Option.StringVarP(&input.MountExclude, "ignore", "i", "", "Comma separated list of mount points to ignore")
-	c.Option.StringVarP(&input.Path, "path", "p", "", "Limit check to specified path")
+	c.Option.IntVarP(&session.Input.Warn, "warn", "w", 80, "Warning percentage (greater than or equal to) threshold")
+	c.Option.IntVarP(&session.Input.Crit, "crit", "c", 100, "Critical percentage (greater than or equal to) threshold")
+	c.Option.Float64VarP(&session.Input.Magic, "magic", "m", 1.0, "Magic factor to adjust thresholds.  Example: 0.9")
+	c.Option.Float64VarP(&session.Input.Normal, "normal", "n", 20, "\"Normal\" size in GB, thresholds are not adjusted for filesystems of exactly this size, levels are reduced for smaller file systems and raised for larger filesystems")
+	c.Option.Float64VarP(&session.Input.Minimum, "minimum", "l", 100, "Minimum size in GB, before applying magic adjustment")
+	c.Option.StringVarP(&session.Input.FstypeExclude, "exclude", "x", "", "Comma separated list of file system types to exclude")
+	c.Option.StringVarP(&session.Input.MountExclude, "ignore", "i", "", "Comma separated list of mount points to ignore")
+	c.Option.StringVarP(&session.Input.Path, "path", "p", "", "Limit check to specified path")
 	c.Init()
 
-	fstype_excludes = strings.Split(input.FstypeExclude, ",")
-	mount_excludes = strings.Split(input.MountExclude, ",")
+	session.FstypeExcludes = strings.Split(session.Input.FstypeExclude, ",")
+	session.MountExcludes = strings.Split(session.Input.MountExclude, ",")
 
-	usage, err := diskUsage(input.Path)
+	usage, err := diskUsage(session.Input.Path)
 	if err != nil {
 		c.Error(err)
 	}
 
 	for _, u := range usage {
-		if !Contains(fstype_excludes, u[1]) && !Contains(mount_excludes, u[6]) {
+		if !Contains(session.FstypeExcludes, u[1]) && !Contains(session.MountExcludes, u[6]) {
 			cap, err := strconv.ParseFloat(strings.TrimRight(u[5], "%"), 64)
 			if err != nil {
 				c.Error(err)
@@ -65,31 +67,31 @@ func main() {
 				c.Error(err)
 			}
 
-			if f_size*1024 >= input.Minimum*1073741824 {
-				f_crit = adjPercent(f_size, float64(input.Crit), input.Magic, input.Normal)
-				f_warn = adjPercent(f_size, float64(input.Warn), input.Magic, input.Normal)
+			if f_size*1024 >= session.Input.Minimum*1073741824 {
+				session.FCrit = adjPercent(f_size, float64(session.Input.Crit), session.Input.Magic, session.Input.Normal)
+				session.FWarn = adjPercent(f_size, float64(session.Input.Warn), session.Input.Magic, session.Input.Normal)
 			} else {
-				f_crit = float64(input.Crit)
-				f_warn = float64(input.Warn)
+				session.FCrit = float64(session.Input.Crit)
+				session.FWarn = float64(session.Input.Warn)
 			}
 			switch {
-			case cap >= f_crit:
-				critMnt = append(critMnt, u[6]+" "+u[5])
-			case cap >= f_warn:
-				warnMnt = append(warnMnt, u[6]+" "+u[5])
+			case cap >= session.FCrit:
+				session.CritMnt = append(session.CritMnt, u[6]+" "+u[5])
+			case cap >= session.FWarn:
+				session.WarnMnt = append(session.WarnMnt, u[6]+" "+u[5])
 			}
-			perf = append(perf, fmt.Sprintf("%s=%s;%.2f;%.2f", u[6], u[5], f_warn, f_crit))
+			session.Perf = append(session.Perf, fmt.Sprintf("%s=%s;%.2f;%.2f", u[6], u[5], session.FWarn, session.FCrit))
 		}
 	}
 
-	perfs = strings.Join(perf, " ")
+	session.Perfs = strings.Join(session.Perf, " ")
 	switch {
-	case len(critMnt) > 0:
-		c.Critical(strings.Join(critMnt, ", ") + " | " + perfs)
-	case len(warnMnt) > 0:
-		c.Warning(strings.Join(warnMnt, ", ") + " | " + perfs)
+	case len(session.CritMnt) > 0:
+		c.Critical(strings.Join(session.CritMnt, ", ") + " | " + session.Perfs)
+	case len(session.WarnMnt) > 0:
+		c.Warning(strings.Join(session.WarnMnt, ", ") + " | " + session.Perfs)
 	default:
-		c.Ok("OK" + " | " + perfs)
+		c.Ok("OK" + " | " + session.Perfs)
 	}
 }
 
