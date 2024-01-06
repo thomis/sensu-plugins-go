@@ -56,5 +56,5 @@ jobs:
 
       - name: Code Climate publish test coverage
         run: |
-          ./cc-test-reporter after-build
+          ./cc-test-reporter after-build --exit-code 0
         if: github.event_name != 'pull_request'
