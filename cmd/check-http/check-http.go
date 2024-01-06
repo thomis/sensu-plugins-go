@@ -19,7 +19,7 @@ type input struct {
 
 func main() {
 	var (
-		input input
+		input    input
 		redirect bool
 	)
 

@@ -22,16 +22,16 @@ type input struct {
 }
 
 type session struct {
-	Input input
+	Input          input
 	FstypeExcludes []string
 	MountExcludes  []string
-	FWarn  float64
-	FCrit  float64
-	WarnMnt []string
-	CritMnt []string
-	Perf    []string
-	Perfs   string
-	FSize   float64
+	FWarn          float64
+	FCrit          float64
+	WarnMnt        []string
+	CritMnt        []string
+	Perf           []string
+	Perfs          string
+	FSize          float64
 }
 
 func main() {
