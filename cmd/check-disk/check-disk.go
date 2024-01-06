@@ -47,8 +47,7 @@ func main() {
 	c.Option.StringVarP(&session.Input.Path, "path", "p", "", "Limit check to specified path")
 	c.Init()
 
-	session.FstypeExcludes = strings.Split(session.Input.FstypeExclude, ",")
-	session.MountExcludes = strings.Split(session.Input.MountExclude, ",")
+	(&session).parseExcludes()
 
 	usage, err := diskUsage(session.Input.Path)
 	if err != nil {
@@ -93,6 +92,11 @@ func main() {
 	default:
 		c.Ok("OK" + " | " + session.Perfs)
 	}
+}
+
+func (s *session) parseExcludes() {
+	s.FstypeExcludes = strings.Split(s.Input.FstypeExclude, ",")
+	s.MountExcludes = strings.Split(s.Input.MountExclude, ",")
 }
 
 func diskUsage(path string) ([][]string, error) {
