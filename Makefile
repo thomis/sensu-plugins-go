@@ -12,7 +12,7 @@ build: clean_bin
 test:
 	@echo "\nAbout to test..."
 	@echo "----------------"
-	go test ./...
+	go test -coverprofile=c.out ./...
 
 format:
 	@echo "\nAbout to format..."
@@ -30,6 +30,11 @@ vul:
 	@echo "\nAbout to check for vulnerabilities..."
 	@echo "--------------------------------------"
 	govulncheck ./...
+
+cover:
+	@echo "\nAbout to generate test coverage..."
+	@echo "------------------------------------"
+	go tool cover -html="c.out"
 
 build_linux_amd64: clean_bin
 	@echo "\nbuilding for linux.amd64..."
