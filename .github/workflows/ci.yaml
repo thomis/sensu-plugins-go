@@ -19,6 +19,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+      CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       ORACLE_HOME: /opt/instantclient_21_8
       LD_LIBRARY_PATH: /opt/instantclient_21_8
       OCI_DIR: /opt/instantclient_21_8
@@ -44,9 +45,16 @@ jobs:
           go install honnef.co/go/tools/cmd/staticcheck@latest
           go install golang.org/x/vuln/cmd/govulncheck@latest
 
+      - name: Code Climate setup test reporter
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+
       - name: Build
         run: make format test lint vul build
 
-      # - name: Check vulnerabilities
-      #   # expected to have binaries build before
-      #   run: make vul
+      - name: Code Climate publish test coverage
+        run: |
+          ./cc-test-reporter after-build
+        if: github.event_name != 'pull_request'
