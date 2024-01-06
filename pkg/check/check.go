@@ -7,40 +7,40 @@ import (
 	"github.com/spf13/pflag"
 )
 
-type checkStruct struct {
-	name   string
+type CheckStruct struct {
+	Name   string
 	Option *pflag.FlagSet
 }
 
-func New(name string) *checkStruct {
-	check := &checkStruct{
-		name:   name,
+func New(name string) *CheckStruct {
+	check := &CheckStruct{
+		Name:   name,
 		Option: pflag.NewFlagSet(name, 1),
 	}
 
 	return check
 }
 
-func (c checkStruct) Init() {
+func (c CheckStruct) Init() {
 	c.Option.Parse(os.Args[1:])
 }
 
-func (c checkStruct) Ok(output string) {
-	fmt.Println(c.name, "OK:", output)
+func (c CheckStruct) Ok(output string) {
+	fmt.Println(c.Name, "OK:", output)
 	os.Exit(0)
 }
 
-func (c checkStruct) Warning(output string) {
-	fmt.Println(c.name, "WARNING:", output)
+func (c CheckStruct) Warning(output string) {
+	fmt.Println(c.Name, "WARNING:", output)
 	os.Exit(1)
 }
 
-func (c checkStruct) Critical(output string) {
-	fmt.Println(c.name, "CRITICAL:", output)
+func (c CheckStruct) Critical(output string) {
+	fmt.Println(c.Name, "CRITICAL:", output)
 	os.Exit(2)
 }
 
-func (c checkStruct) Error(err error) {
-	fmt.Println(c.name, "ERROR:", err)
+func (c CheckStruct) Error(err error) {
+	fmt.Println(c.Name, "ERROR:", err)
 	os.Exit(3)
 }
