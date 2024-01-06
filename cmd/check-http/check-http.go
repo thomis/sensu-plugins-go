@@ -9,26 +9,30 @@ import (
 	"github.com/thomis/sensu-plugins-go/pkg/check"
 )
 
+type input struct {
+	Url      string
+	Timeout  int
+	Insecure bool
+	Username string
+	Password string
+}
+
 func main() {
 	var (
-		url      string
+		input input
 		redirect bool
-		timeout  int
-		insecure bool
-		username string
-		password string
 	)
 
 	c := check.New("CheckHTTP")
-	c.Option.StringVarP(&url, "url", "u", "http://localhost/", "URL")
-	c.Option.IntVarP(&timeout, "timeout", "t", 15, "TIMEOUT")
-	c.Option.StringVarP(&username, "username", "", "", "Username for basic authentication")
-	c.Option.StringVarP(&password, "password", "", "", "Password for basic authentication")
-	c.Option.BoolVarP(&insecure, "insecure", "k", false, "INSECURE (skips peer certificate validation)")
+	c.Option.StringVarP(&input.Url, "url", "u", "http://localhost/", "URL")
+	c.Option.IntVarP(&input.Timeout, "timeout", "t", 15, "TIMEOUT")
+	c.Option.StringVarP(&input.Username, "username", "", "", "Username for basic authentication")
+	c.Option.StringVarP(&input.Password, "password", "", "", "Password for basic authentication")
+	c.Option.BoolVarP(&input.Insecure, "insecure", "k", false, "INSECURE (skips peer certificate validation)")
 
 	c.Init()
 
-	status, err := statusCode(url, timeout, insecure, username, password)
+	status, err := statusCode(input)
 	if err != nil {
 		c.Error(err)
 	}
@@ -45,20 +49,20 @@ func main() {
 	}
 }
 
-func statusCode(url string, timeout int, insecure bool, username string, password string) (int, error) {
+func statusCode(input input) (int, error) {
 	c := http.Client{
-		Timeout: time.Duration(timeout) * time.Second,
+		Timeout: time.Duration(input.Timeout) * time.Second,
 		Transport: &http.Transport{
-			ResponseHeaderTimeout: time.Duration(timeout) * time.Second,
-			TLSClientConfig:       &tls.Config{InsecureSkipVerify: insecure}}}
+			ResponseHeaderTimeout: time.Duration(input.Timeout) * time.Second,
+			TLSClientConfig:       &tls.Config{InsecureSkipVerify: input.Insecure}}}
 
-	request, err := http.NewRequest(http.MethodGet, url, http.NoBody)
+	request, err := http.NewRequest(http.MethodGet, input.Url, http.NoBody)
 	if err != nil {
 		return 0, err
 	}
 
-	if len(username) > 0 || len(password) > 0 {
-		request.SetBasicAuth(username, password)
+	if len(input.Username) > 0 || len(input.Password) > 0 {
+		request.SetBasicAuth(input.Username, input.Password)
 	}
 
 	response, err := c.Do(request)
