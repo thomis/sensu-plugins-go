@@ -31,6 +31,7 @@ type session struct {
 	CritMnt []string
 	Perf    []string
 	Perfs   string
+	FSize   float64
 }
 
 func main() {
@@ -61,18 +62,13 @@ func main() {
 				c.Error(err)
 			}
 
-			f_size, err := strconv.ParseFloat(u[2], 64)
+			session.FSize, err = strconv.ParseFloat(u[2], 64)
 			if err != nil {
 				c.Error(err)
 			}
 
-			if f_size*1024 >= session.Input.Minimum*1073741824 {
-				session.FCrit = adjPercent(f_size, float64(session.Input.Crit), session.Input.Magic, session.Input.Normal)
-				session.FWarn = adjPercent(f_size, float64(session.Input.Warn), session.Input.Magic, session.Input.Normal)
-			} else {
-				session.FCrit = float64(session.Input.Crit)
-				session.FWarn = float64(session.Input.Warn)
-			}
+			(&session).caluculateFCritAndFWarn()
+
 			switch {
 			case cap >= session.FCrit:
 				session.CritMnt = append(session.CritMnt, u[6]+" "+u[5])
@@ -97,6 +93,16 @@ func main() {
 func (s *session) parseExcludes() {
 	s.FstypeExcludes = strings.Split(s.Input.FstypeExclude, ",")
 	s.MountExcludes = strings.Split(s.Input.MountExclude, ",")
+}
+
+func (s *session) caluculateFCritAndFWarn() {
+	if s.FSize*1024 >= s.Input.Minimum*1073741824 {
+		s.FCrit = adjPercent(s.FSize, float64(s.Input.Crit), s.Input.Magic, s.Input.Normal)
+		s.FWarn = adjPercent(s.FSize, float64(s.Input.Warn), s.Input.Magic, s.Input.Normal)
+	} else {
+		s.FCrit = float64(s.Input.Crit)
+		s.FWarn = float64(s.Input.Warn)
+	}
 }
 
 func diskUsage(path string) ([][]string, error) {
