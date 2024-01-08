@@ -10,13 +10,14 @@ import (
 type CheckStruct struct {
 	Name   string
 	Option *pflag.FlagSet
+	ExitFn func(int)
 }
 
 func New(name string) *CheckStruct {
 	check := &CheckStruct{
 		Name:   name,
 		Option: pflag.NewFlagSet(name, 1),
-	}
+		ExitFn: os.Exit}
 
 	return check
 }
@@ -27,20 +28,20 @@ func (c CheckStruct) Init() {
 
 func (c CheckStruct) Ok(output string) {
 	fmt.Println(c.Name, "OK:", output)
-	os.Exit(0)
+	c.ExitFn(0)
 }
 
 func (c CheckStruct) Warning(output string) {
 	fmt.Println(c.Name, "WARNING:", output)
-	os.Exit(1)
+	c.ExitFn(1)
 }
 
 func (c CheckStruct) Critical(output string) {
 	fmt.Println(c.Name, "CRITICAL:", output)
-	os.Exit(2)
+	c.ExitFn(2)
 }
 
 func (c CheckStruct) Error(err error) {
 	fmt.Println(c.Name, "ERROR:", err)
-	os.Exit(3)
+	c.ExitFn(3)
 }

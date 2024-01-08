@@ -15,14 +15,53 @@ func TestInit(t *testing.T) {
 }
 
 func TestOk(t *testing.T) {
-	check := New("something")
+	var value int
+	fakeExit := func(code int) {
+		value = code
+	}
 
-	go func() {
-		defer func() {
-			if r := recover(); r != nil {
-				assert.Equal(t, fmt.Sprintf("%v", r), "unexpected call to os.Exit(0) during test")
-			}
-		}()
-		check.Ok("whatever")
-	}()
+	check := New("something")
+	check.ExitFn = fakeExit
+
+	check.Ok("whatever")
+	assert.Equal(t, 0, value)
+}
+
+func TestWarning(t *testing.T) {
+	var value int
+	fakeExit := func(code int) {
+		value = code
+	}
+
+	check := New("something")
+	check.ExitFn = fakeExit
+
+	check.Warning("whatever")
+	assert.Equal(t, 1, value)
+}
+
+func TestCritical(t *testing.T) {
+	var value int
+	fakeExit := func(code int) {
+		value = code
+	}
+
+	check := New("something")
+	check.ExitFn = fakeExit
+
+	check.Critical("whatever")
+	assert.Equal(t, 2, value)
+}
+
+func TestEror(t *testing.T) {
+	var value int
+	fakeExit := func(code int) {
+		value = code
+	}
+
+	check := New("something")
+	check.ExitFn = fakeExit
+
+	check.Error(fmt.Errorf("whatever"))
+	assert.Equal(t, 3, value)
 }
