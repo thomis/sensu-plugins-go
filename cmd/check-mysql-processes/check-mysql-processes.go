@@ -13,15 +13,15 @@ import (
 )
 
 type session struct {
-	Connection common.Connection
-	Critical   string
-	Warning    string
-	CritMin    int64
-	CritMax    int64
-	WarnMin    int64
-	WarnMax    int64
+	Connection   common.Connection
+	Critical     string
+	Warning      string
+	CritMin      int64
+	CritMax      int64
+	WarnMin      int64
+	WarnMax      int64
 	ProcessCount int64
-	Check      *check.CheckStruct
+	Check        *check.CheckStruct
 }
 
 func main() {
