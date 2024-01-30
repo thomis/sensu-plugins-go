@@ -59,7 +59,7 @@ jobs:
 
   macOS:
     name: Release for macOS (ARM)
-    runs-on: macos-latest
+    runs-on: macos-14
     env:
       ORACLE_HOME: ~/opt/instantclient_19_8
       LD_LIBRARY_PATH: ~/opt/instantclient_19_8
