@@ -1,7 +1,6 @@
 package main
 
 import (
-	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -10,13 +9,10 @@ import (
 func TestDiskUsageNoPath(t *testing.T) {
 	results, err := diskUsage("")
 
-	// exclude test on macos platforms for now, as there are different behaviours depending of version
-	// Exp. 12.x.x => df: -l and -T are mutually exclusive.
-	// Exp. 14.x.x => Works fine
-	if runtime.GOOS != "darwin" {
-		assert.Nil(t, err)
-		assert.GreaterOrEqual(t, len(results), 0)
-	}
+	// Exp. macOS 12.x.x => df: -l and -T are mutually exclusive. We might need to exclude from testing
+	// Exp. macOS 14.x.x => Works fine
+	assert.Nil(t, err)
+	assert.GreaterOrEqual(t, len(results), 0)
 }
 
 func TestDiskUsage(t *testing.T) {
