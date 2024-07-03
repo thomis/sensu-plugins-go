@@ -22,20 +22,22 @@ format:
 lint:
 		@echo "\nAbout to lint..."
 		@echo "----------------"
-		@if ! command -v staticcheck &> /dev/null; then \
-			echo "staticcheck not found, installing..."; \
-			go install honnef.co/go/tools/cmd/staticcheck@latest && asdf reshim golang; \
-		fi
 		staticcheck ./...
+
+lint_install:
+	@echo "\nInstalling staticcheck..."
+	@echo "-------------------------"
+	go install honnef.co/go/tools/cmd/staticcheck@latest && asdf reshim golang
 
 vul:
 	@echo "\nAbout to check for vulnerabilities..."
 	@echo "--------------------------------------"
-	@if ! command -v govulncheck &> /dev/null; then \
-		echo "govulncheck not found, installing..."; \
-		go install golang.org/x/vuln/cmd/govulncheck@latest && asdf reshim golang; \
-	fi
 	govulncheck ./...
+
+vul_install:
+	@echo "\nInstalling govulncheck..."
+	@echo "-------------------------"
+	go install golang.org/x/vuln/cmd/govulncheck@latest && asdf reshim golang
 
 cover:
 	@echo "\nAbout to generate test coverage..."
