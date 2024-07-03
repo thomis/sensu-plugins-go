@@ -20,15 +20,21 @@ format:
 	go fmt ./...
 
 lint:
-	# install: go install honnef.co/go/tools/cmd/staticcheck@latest
-	@echo "\nAbout to lint..."
-	@echo "----------------"
-	staticcheck ./...
+		@echo "\nAbout to lint..."
+		@echo "----------------"
+		@if ! command -v staticcheck &> /dev/null; then \
+			echo "staticcheck not found, installing..."; \
+			go install honnef.co/go/tools/cmd/staticcheck@latest && asdf reshim golang; \
+		fi
+		staticcheck ./...
 
 vul:
-	# install: go install golang.org/x/vuln/cmd/govulncheck@latest
 	@echo "\nAbout to check for vulnerabilities..."
 	@echo "--------------------------------------"
+	@if ! command -v govulncheck &> /dev/null; then \
+		echo "govulncheck not found, installing..."; \
+		go install golang.org/x/vuln/cmd/govulncheck@latest && asdf reshim golang; \
+	fi
 	govulncheck ./...
 
 cover:
