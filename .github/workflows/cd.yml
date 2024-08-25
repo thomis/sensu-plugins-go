@@ -44,14 +44,14 @@ jobs:
           make build_linux_arm64
 
       - name: Upload release for linux amd64
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             releases/sensu-checks-go.linux.amd64.tar.gz
             releases/sensu-checks-go.linux.amd64.tar.gz.sha512
 
       - name: Upload release for linux arm64
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             releases/sensu-checks-go.linux.arm64.tar.gz
@@ -97,14 +97,14 @@ jobs:
           make build_darwin_arm64
 
       - name: Upload release for darwin amd64
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             releases/sensu-checks-go.darwin.amd64.tar.gz
             releases/sensu-checks-go.darwin.amd64.tar.gz.sha512
 
       - name: Upload release for darwin arm64
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             releases/sensu-checks-go.darwin.arm64.tar.gz
