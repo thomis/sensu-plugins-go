@@ -1,8 +1,12 @@
+
 BUILDOPT := -ldflags '-s -w'
 SOURCES  := $(wildcard cmd/*/*.go)
 # there is currently no instant client for darwin arm64, therefore we exclude oracle based files
 SOURCES_NO_ORACLE := $(wildcard $(shell find cmd -type f -name "*.go" -not -path "*oracle*"))
 BINARIES := $(wildcard bin/*)
+
+GREEN := \033[32m
+RESET := \033[0m
 
 .PHONY: build
 build: clean_bin
@@ -12,11 +16,13 @@ build: clean_bin
 
 .PHONY: outdated
 outdated:
-	go list -u -m -f '{{if .Update}}{{.}}{{end}}' all
+	@echo "$(GREEN)List outdated direct-dependencies$(RESET)"
+	@go list -u -m -f '{{if and .Update (not .Indirect)}}{{.}}{{end}}' all
 
 .PHONY: update
 update:
-	go get -u ./...
+	@echo "$(GREEN)Update direct-dependencies$(RESET)"
+	@go get -u ./...
 
 .PHONY: test
 test:
