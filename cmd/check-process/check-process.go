@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"regexp"
 
-	"github.com/mitchellh/go-ps"
+	"github.com/shirou/gopsutil/v4/process"
 	"github.com/thomis/sensu-plugins-go/pkg/check"
 )
 
@@ -39,14 +40,20 @@ func countProcess(pattern string) (int, error) {
 		return count, err
 	}
 
-	processes, err := ps.Processes()
+	processes, err := process.Processes()
 	if err != nil {
 		return count, err
 	}
 
+	pid := os.Getpid()
+
 	for _, process := range processes {
-		if re.Match([]byte(process.Executable())) {
-			fmt.Printf(" - (%d) %s\n", process.Pid(), process.Executable())
+		if int32(pid) == process.Pid {
+			continue
+		}
+		cmdLine, _ := process.Cmdline()
+		if re.Match([]byte(cmdLine)) {
+			fmt.Printf(" - (%d) %s\n", process.Pid, cmdLine)
 			count += 1
 		}
 	}

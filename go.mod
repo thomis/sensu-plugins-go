@@ -7,12 +7,12 @@ toolchain go1.23.0
 require (
 	github.com/bitly/go-simplejson v0.5.1
 	github.com/go-sql-driver/mysql v1.8.1
-	github.com/godror/godror v0.44.2
+	github.com/godror/godror v0.44.4
 	github.com/gomodule/redigo v1.9.2
 	github.com/hico-horiuchi/ohgibone v0.22.1
 	github.com/lib/pq v1.10.9
-	github.com/mitchellh/go-ps v1.0.0
 	github.com/shirou/gopsutil/v3 v3.24.5
+	github.com/shirou/gopsutil/v4 v4.24.7
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.9.0
 )
