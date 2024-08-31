@@ -9,7 +9,7 @@ GREEN := \033[32m
 RESET := \033[0m
 
 .PHONY: build
-build: clean_bin
+build: clean_bin format lint vul
 	@echo "\nBuilding local..."
 	@echo "-----------------"
 	@$(foreach FILE, $(SOURCES), echo $(FILE); go mod tidy && go build -o bin/`basename $(FILE) .go` $(FILE);)

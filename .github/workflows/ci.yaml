@@ -52,7 +52,7 @@ jobs:
           ./cc-test-reporter before-build
 
       - name: Build
-        run: make format test lint vul build
+        run: make test build
 
       - name: Code Climate publish test coverage
         run: |
