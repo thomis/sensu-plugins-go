@@ -7,12 +7,12 @@ toolchain go1.23.0
 require (
 	github.com/bitly/go-simplejson v0.5.1
 	github.com/go-sql-driver/mysql v1.8.1
-	github.com/godror/godror v0.44.5
+	github.com/godror/godror v0.44.6
 	github.com/gomodule/redigo v1.9.2
 	github.com/hico-horiuchi/ohgibone v0.22.1
 	github.com/lib/pq v1.10.9
 	github.com/shirou/gopsutil/v3 v3.24.5
-	github.com/shirou/gopsutil/v4 v4.24.7
+	github.com/shirou/gopsutil/v4 v4.24.8
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.9.0
 )
@@ -32,8 +32,8 @@ require (
 	github.com/tklauser/go-sysconf v0.3.14 // indirect
 	github.com/tklauser/numcpus v0.8.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
-	golang.org/x/exp v0.0.0-20240823005443-9b4947da3948 // indirect
-	golang.org/x/sys v0.24.0 // indirect
+	golang.org/x/exp v0.0.0-20240904232852-e7e105dedf7e // indirect
+	golang.org/x/sys v0.25.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
