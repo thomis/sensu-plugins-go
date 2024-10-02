@@ -7,12 +7,12 @@ toolchain go1.23.0
 require (
 	github.com/bitly/go-simplejson v0.5.1
 	github.com/go-sql-driver/mysql v1.8.1
-	github.com/godror/godror v0.44.7
+	github.com/godror/godror v0.44.8
 	github.com/gomodule/redigo v1.9.2
 	github.com/hico-horiuchi/ohgibone v0.22.1
 	github.com/lib/pq v1.10.9
 	github.com/shirou/gopsutil/v3 v3.24.5
-	github.com/shirou/gopsutil/v4 v4.24.8
+	github.com/shirou/gopsutil/v4 v4.24.9
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.9.0
 )
@@ -20,6 +20,7 @@ require (
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/ebitengine/purego v0.8.0 // indirect
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/godror/knownpb v0.2.0 // indirect
