@@ -3,15 +3,11 @@ updates:
   - package-ecosystem: "gomod"
     directory: "/" # Location of package manifests
     schedule:
-      interval: "weekly"
-      day: "saturday"
-      time: "04:05"
-      timezone: "Europe/Zurich"
+      interval: daily
+    open-pull-requests-limit: 10
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "saturday"
-      time: "04:05"
-      timezone: "Europe/Zurich"
+      interval: daily
+    open-pull-requests-limit: 10
