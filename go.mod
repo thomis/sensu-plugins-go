@@ -12,7 +12,7 @@ require (
 	github.com/hico-horiuchi/ohgibone v0.22.1
 	github.com/lib/pq v1.10.9
 	github.com/shirou/gopsutil/v3 v3.24.5
-	github.com/shirou/gopsutil/v4 v4.24.11
+	github.com/shirou/gopsutil/v4 v4.24.12
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.10.0
 )
