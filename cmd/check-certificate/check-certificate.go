@@ -55,11 +55,11 @@ func main() {
 	cert := certs[0]
 	now := time.Now()
 	if now.Before(cert.NotBefore) {
-		c.Error(fmt.Errorf("Certificate Not Before: " + cert.NotBefore.Format("2006-01-02 15:04:05") + " UTC"))
+		c.Error(fmt.Errorf("certificate not before: %s UTC", cert.NotBefore.Format("2006-01-02 15:04:05")))
 	}
 
 	if now.After(cert.NotAfter) {
-		c.Error(fmt.Errorf("Certificate Not After: " + cert.NotAfter.Format("2006-01-02 15:04:05") + " UTC"))
+		c.Error(fmt.Errorf("certificate not after: %s UTC", cert.NotBefore.Format("2006-01-02 15:04:05")))
 	}
 
 	// expiry warning in days

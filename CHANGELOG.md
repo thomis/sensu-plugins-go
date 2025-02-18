@@ -5,6 +5,13 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.19.0] - 2025-02-18
+
+### Changed
+
+- Update dependencies
+- Fix non-constant format string in call to fmt.Errorf
+
 ## [2.18.0] - 2025-02-12
 
 ### Changed
