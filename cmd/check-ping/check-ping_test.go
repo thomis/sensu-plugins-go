@@ -12,7 +12,44 @@ import (
 // Since the original code only has main(), we'll test the core functionality
 // by testing net.DialTimeout behavior with different scenarios
 
+// Helper function to find a port that is likely closed
+func findClosedPort() int {
+	// Try to bind to a random port, then close it immediately
+	// This gives us a port that was recently available but is now closed
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		// Fallback to a high port number unlikely to be in use
+		return 54321
+	}
+	port := listener.Addr().(*net.TCPAddr).Port
+	listener.Close()
+	// Give the OS a moment to fully release the port
+	time.Sleep(10 * time.Millisecond)
+	return port
+}
+
 func TestDialTimeout(t *testing.T) {
+	// Create a test server to ensure we have a valid endpoint
+	testServer, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatalf("Failed to create test server: %v", err)
+	}
+	defer testServer.Close()
+
+	// Get the port that was assigned
+	testPort := testServer.Addr().(*net.TCPAddr).Port
+
+	// Accept connections in the background
+	go func() {
+		for {
+			conn, err := testServer.Accept()
+			if err != nil {
+				return
+			}
+			conn.Close()
+		}
+	}()
+
 	tests := []struct {
 		name     string
 		host     string
@@ -22,11 +59,11 @@ func TestDialTimeout(t *testing.T) {
 		errCheck func(error) bool
 	}{
 		{
-			name:    "Valid connection to localhost",
-			host:    "localhost",
-			port:    8021, // Port we saw listening
+			name:    "Valid connection to test server",
+			host:    "127.0.0.1",
+			port:    testPort,
 			timeout: 5 * time.Second,
-			wantErr: false, // This may fail if service is not running
+			wantErr: false,
 		},
 		{
 			name:    "Invalid port",
@@ -36,6 +73,17 @@ func TestDialTimeout(t *testing.T) {
 			wantErr: true,
 			errCheck: func(err error) bool {
 				// Port out of range
+				return err != nil
+			},
+		},
+		{
+			name:    "Connection refused on closed port",
+			host:    "127.0.0.1",
+			port:    findClosedPort(),
+			timeout: 1 * time.Second,
+			wantErr: true,
+			errCheck: func(err error) bool {
+				// Should get connection refused
 				return err != nil
 			},
 		},
