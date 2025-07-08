@@ -26,8 +26,8 @@ jobs:
           mkdir -p /opt && cd /opt
           curl https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-basic-linux.x64-23.8.0.25.04.zip --output instantclient.zip
           curl https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-sdk-linux.x64-23.8.0.25.04.zip --output instantclient_sdk.zip
-          unzip instantclient.zip
-          unzip instantclient_sdk.zip
+          unzip -o ~/opt/instantclient.zip -d ~/opt
+          unzip -o ~/opt/instantclient_sdk.zip -d ~/opt
 
       - name: Install staticcheck
         run: |
@@ -61,9 +61,9 @@ jobs:
     name: Release for macOS (ARM)
     runs-on: macos-14
     env:
-      ORACLE_HOME: ~/opt/instantclient_19_8
-      LD_LIBRARY_PATH: ~/opt/instantclient_19_8
-      OCI_DIR: ~/opt/instantclient_19_8
+      ORACLE_HOME: ~/opt/instantclient_23_8
+      LD_LIBRARY_PATH: ~/opt/instantclient_23_8
+      OCI_DIR: ~/opt/instantclient_23_8
       NLS_LANG: AMERICAN_AMERICA.AL32UTF8
 
     steps:
