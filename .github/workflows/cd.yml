@@ -51,9 +51,9 @@ jobs:
     name: Release for macOS (ARM)
     runs-on: macos-14
     env:
-      ORACLE_HOME: /opt/instantclient_19_8
-      LD_LIBRARY_PATH: /opt/instantclient_19_8
-      OCI_DIR: /opt/instantclient_18_8
+      ORACLE_HOME: /opt/oracle/instantclient_23_3
+      DYLD_LIBRARY_PATH: /opt/oracle/instantclient_23_3
+      OCI_DIR: /opt/oracle/instantclient_23_3
       NLS_LANG: AMERICAN_AMERICA.AL32UTF8
     steps:
       - uses: actions/checkout@v4
@@ -63,11 +63,33 @@ jobs:
           check-latest: true
       - name: Install Oracle instant client
         run: |
-          sudo mkdir -p /opt && cd /opt
-          sudo curl https://download.oracle.com/otn_software/mac/instantclient/198000/instantclient-basic-macos.x64-19.8.0.0.0dbru.zip --output /opt/instantclient.zip
-          sudo curl https://download.oracle.com/otn_software/mac/instantclient/198000/instantclient-sdk-macos.x64-19.8.0.0.0dbru.zip --output /opt/instantclient_sdk.zip
-          sudo unzip -o instantclient.zip
-          sudo unzip -o instantclient_sdk.zip
+          # Download the Basic and SDK DMG files (23.3.0.23.09)
+          curl -L -o instantclient-basic.dmg https://download.oracle.com/otn_software/mac/instantclient/2330000/instantclient-basic-macos.arm64-23.3.0.23.09-1.dmg
+          curl -L -o instantclient-sdk.dmg https://download.oracle.com/otn_software/mac/instantclient/2330000/instantclient-sdk-macos.arm64-23.3.0.23.09.dmg
+
+          # Mount the DMG files
+          hdiutil mount instantclient-basic.dmg
+          hdiutil mount instantclient-sdk.dmg
+
+          # Create destination directory
+          sudo mkdir -p /opt/oracle/instantclient_23_3
+
+          # Copy files from mounted volumes to destination
+          # The DMG contains the files in a subdirectory structure
+          sudo cp -R /Volumes/instantclient-basic-macos.arm64-23.3.0.23.09/* /opt/oracle/instantclient_23_3/
+          sudo cp -R /Volumes/instantclient-sdk-macos.arm64-23.3.0.23.09/sdk /opt/oracle/instantclient_23_3/
+
+          # Create symbolic links for compatibility
+          cd /opt/oracle/instantclient_23_3
+          sudo ln -sf libclntsh.dylib.23.1 libclntsh.dylib
+          sudo ln -sf libocci.dylib.23.1 libocci.dylib
+
+          # Unmount the DMG files
+          hdiutil unmount /Volumes/instantclient-basic-macos.arm64-23.3.0.23.09 || true
+          hdiutil unmount /Volumes/instantclient-sdk-macos.arm64-23.3.0.23.09 || true
+
+          # Clean up DMG files
+          rm -f instantclient-basic.dmg instantclient-sdk.dmg
       - name: Install staticcheck
         run: |
           go install honnef.co/go/tools/cmd/staticcheck@latest
