@@ -76,8 +76,8 @@ jobs:
       - name: Install Oracle instant client
         run: |
           mkdir -p /opt && cd /opt
-          curl https://download.oracle.com/otn_software/mac/instantclient/238000/instantclient-basic-macos.x64-23.8.0.0.0dbru.zip --output ~/opt/instantclient.zip
-          curl https://download.oracle.com/otn_software/mac/instantclient/238000/instantclient-sdk-macos.x64-23.8.0.0.0dbru.zip --output ~/opt/instantclient_sdk.zip
+          curl https://download.oracle.com/otn_software/mac/instantclient/238000/instantclient-basic-macos.x64-23.8.0.0.0dbru.zip --output /opt/instantclient.zip
+          curl https://download.oracle.com/otn_software/mac/instantclient/238000/instantclient-sdk-macos.x64-23.8.0.0.0dbru.zip --output /opt/instantclient_sdk.zip
           unzip -o /opt/instantclient.zip
           unzip -o /opt/instantclient_sdk.zip
 
