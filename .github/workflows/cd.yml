@@ -64,8 +64,8 @@ jobs:
       - name: Install Oracle instant client
         run: |
           # Download the Basic and SDK DMG files (23.3.0.23.09)
-          curl -L -o instantclient-basic.dmg https://download.oracle.com/otn_software/mac/instantclient/2330000/instantclient-basic-macos.arm64-23.3.0.23.09-1.dmg
-          curl -L -o instantclient-sdk.dmg https://download.oracle.com/otn_software/mac/instantclient/2330000/instantclient-sdk-macos.arm64-23.3.0.23.09.dmg
+          curl -L -o instantclient-basic.dmg https://download.oracle.com/otn_software/mac/instantclient/instantclient-basic-macos-arm64.dmg
+          curl -L -o instantclient-sdk.dmg https://download.oracle.com/otn_software/mac/instantclient/instantclient-sdk-macos-arm64.dmg
 
           # Mount the DMG files
           hdiutil mount instantclient-basic.dmg
