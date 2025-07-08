@@ -64,8 +64,8 @@ jobs:
       - name: Install Oracle instant client
         run: |
           sudo mkdir -p /opt && cd /opt
-          curl https://download.oracle.com/otn_software/mac/instantclient/198000/instantclient-basic-macos.x64-19.8.0.0.0dbru.zip --output ~/opt/instantclient.zip
-          curl https://download.oracle.com/otn_software/mac/instantclient/198000/instantclient-sdk-macos.x64-19.8.0.0.0dbru.zip --output ~/opt/instantclient_sdk.zip
+          curl https://download.oracle.com/otn_software/mac/instantclient/198000/instantclient-basic-macos.x64-19.8.0.0.0dbru.zip --output /opt/instantclient.zip
+          curl https://download.oracle.com/otn_software/mac/instantclient/198000/instantclient-sdk-macos.x64-19.8.0.0.0dbru.zip --output /opt/instantclient_sdk.zip
           sudo unzip -o instantclient.zip
           sudo unzip -o instantclient_sdk.zip
       - name: Install staticcheck
