@@ -141,14 +141,7 @@ jobs:
         run: |
           sudo sh -c 'echo "#!/bin/sh\nshasum -a 512 \$1" > /usr/local/bin/sha512sum && chmod +x /usr/local/bin/sha512sum'
           make clean_release test lint vul
-          make build_darwin_amd64
           make build_darwin_arm64
-      - name: Upload release for darwin amd64
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            releases/sensu-checks-go.darwin.amd64.tar.gz
-            releases/sensu-checks-go.darwin.amd64.tar.gz.sha512
       - name: Upload release for darwin arm64
         uses: softprops/action-gh-release@v2
         with:
