@@ -1,9 +1,7 @@
 name: cd
-
 on:
   release:
     types: [ published ]
-
 jobs:
   linux:
     name: Release for Linux
@@ -13,50 +11,42 @@ jobs:
       LD_LIBRARY_PATH: /opt/instantclient_23_8
       OCI_DIR: /opt/instantclient_23_8
       NLS_LANG: AMERICAN_AMERICA.AL32UTF8
-
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version: '1.24.5'
           check-latest: true
-
       - name: Install Oracle instant client
         run: |
-          mkdir -p /opt && cd /opt
-          curl https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-basic-linux.x64-23.8.0.25.04.zip --output instantclient.zip
-          curl https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-sdk-linux.x64-23.8.0.25.04.zip --output instantclient_sdk.zip
-          unzip -o /opt/instantclient.zip
-          unzip -o /opt/instantclient_sdk.zip
-
+          sudo mkdir -p /opt && cd /opt
+          sudo curl https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-basic-linux.x64-23.8.0.25.04.zip --output instantclient.zip
+          sudo curl https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-sdk-linux.x64-23.8.0.25.04.zip --output instantclient_sdk.zip
+          sudo unzip -o instantclient.zip
+          sudo unzip -o instantclient_sdk.zip
       - name: Install staticcheck
         run: |
           go install honnef.co/go/tools/cmd/staticcheck@latest
-
       - name: Install govulncheck
         run: |
           go install golang.org/x/vuln/cmd/govulncheck@latest
-
       - name: Build
         run: |
           make clean_release test lint vul
           make build_linux_amd64
           make build_linux_arm64
-
       - name: Upload release for linux amd64
         uses: softprops/action-gh-release@v2
         with:
           files: |
             releases/sensu-checks-go.linux.amd64.tar.gz
             releases/sensu-checks-go.linux.amd64.tar.gz.sha512
-
       - name: Upload release for linux arm64
         uses: softprops/action-gh-release@v2
         with:
           files: |
             releases/sensu-checks-go.linux.arm64.tar.gz
             releases/sensu-checks-go.linux.arm64.tar.gz.sha512
-
   macOS:
     name: Release for macOS (ARM)
     runs-on: macos-14
@@ -65,44 +55,37 @@ jobs:
       LD_LIBRARY_PATH: /opt/instantclient_23_8
       OCI_DIR: /opt/instantclient_23_8
       NLS_LANG: AMERICAN_AMERICA.AL32UTF8
-
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version: '1.24.5'
           check-latest: true
-
       - name: Install Oracle instant client
         run: |
-          mkdir -p /opt && cd /opt
-          curl https://download.oracle.com/otn_software/mac/instantclient/238000/instantclient-basic-macos.x64-23.8.0.0.0dbru.zip --output /opt/instantclient.zip
-          curl https://download.oracle.com/otn_software/mac/instantclient/238000/instantclient-sdk-macos.x64-23.8.0.0.0dbru.zip --output /opt/instantclient_sdk.zip
-          unzip -o /opt/instantclient.zip
-          unzip -o /opt/instantclient_sdk.zip
-
+          sudo mkdir -p /opt && cd /opt
+          sudo curl https://download.oracle.com/otn_software/mac/instantclient/238000/instantclient-basic-macos.x64-23.8.0.0.0dbru.zip --output instantclient.zip
+          sudo curl https://download.oracle.com/otn_software/mac/instantclient/238000/instantclient-sdk-macos.x64-23.8.0.0.0dbru.zip --output instantclient_sdk.zip
+          sudo unzip -o instantclient.zip
+          sudo unzip -o instantclient_sdk.zip
       - name: Install staticcheck
         run: |
           go install honnef.co/go/tools/cmd/staticcheck@latest
-
       - name: Install govulncheck
         run: |
           go install golang.org/x/vuln/cmd/govulncheck@latest
-
       - name: Build
         run: |
-          echo -e "#!/bin/sh\nshasum -a 512 $1" > /usr/local/bin/sha512sum && chmod +x /usr/local/bin/sha512sum
+          sudo sh -c 'echo "#!/bin/sh\nshasum -a 512 \$1" > /usr/local/bin/sha512sum && chmod +x /usr/local/bin/sha512sum'
           make clean_release test lint vul
           make build_darwin_amd64
           make build_darwin_arm64
-
       - name: Upload release for darwin amd64
         uses: softprops/action-gh-release@v2
         with:
           files: |
             releases/sensu-checks-go.darwin.amd64.tar.gz
             releases/sensu-checks-go.darwin.amd64.tar.gz.sha512
-
       - name: Upload release for darwin arm64
         uses: softprops/action-gh-release@v2
         with:

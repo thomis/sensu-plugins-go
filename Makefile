@@ -1,6 +1,7 @@
 BUILDOPT := -ldflags '-s -w'
-SOURCES  := $(wildcard cmd/*/*.go)
-SOURCES_NO_ORACLE := $(shell find cmd -type f -name "*.go" -not -path "*oracle*")
+SOURCES  := $(shell find cmd -type f -name "*.go" -not -name "*_test.go")
+# Fix: Properly find non-oracle Go files, excluding test files
+SOURCES_NO_ORACLE := $(shell find cmd -type f -name "*.go" -not -path "*oracle*" -not -name "*_test.go")
 BINARIES := $(wildcard bin/*)
 GREEN := \033[32m
 RESET := \033[0m
