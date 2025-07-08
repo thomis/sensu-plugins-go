@@ -9,9 +9,9 @@ jobs:
     name: Release for Linux
     runs-on: ubuntu-latest
     env:
-      ORACLE_HOME: /opt/instantclient_21_8
-      LD_LIBRARY_PATH: /opt/instantclient_21_8
-      OCI_DIR: /opt/instantclient_21_8
+      ORACLE_HOME: /opt/instantclient_23_8
+      LD_LIBRARY_PATH: /opt/instantclient_23_8
+      OCI_DIR: /opt/instantclient_23_8
       NLS_LANG: AMERICAN_AMERICA.AL32UTF8
 
     steps:
@@ -24,8 +24,8 @@ jobs:
       - name: Install Oracle instant client
         run: |
           mkdir -p /opt && cd /opt
-          curl https://download.oracle.com/otn_software/linux/instantclient/218000/instantclient-basic-linux.x64-21.8.0.0.0dbru.zip --output instantclient.zip
-          curl https://download.oracle.com/otn_software/linux/instantclient/218000/instantclient-sdk-linux.x64-21.8.0.0.0dbru.zip --output instantclient_sdk.zip
+          curl https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-basic-linux.x64-23.8.0.25.04.zip --output instantclient.zip
+          curl https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-sdk-linux.x64-23.8.0.25.04.zip --output instantclient_sdk.zip
           unzip instantclient.zip
           unzip instantclient_sdk.zip
 
