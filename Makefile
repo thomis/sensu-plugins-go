@@ -1,10 +1,7 @@
-
 BUILDOPT := -ldflags '-s -w'
 SOURCES  := $(wildcard cmd/*/*.go)
-# there is currently no instant client for darwin arm64, therefore we exclude oracle based files
-SOURCES_NO_ORACLE := $(wildcard $(shell find cmd -type f -name "*.go" -not -path "*oracle*"))
+SOURCES_NO_ORACLE := $(shell find cmd -type f -name "*.go" -not -path "*oracle*")
 BINARIES := $(wildcard bin/*)
-
 GREEN := \033[32m
 RESET := \033[0m
 
@@ -97,7 +94,7 @@ build_darwin_amd64: clean_bin
 build_darwin_arm64: clean_bin
 	@echo "\nbuilding for darwin.arm64..."
 	@echo "---------------------------"
-	@$(foreach FILE, $(SOURCES), echo $(FILE); \
+	@$(foreach FILE, $(SOURCES_NO_ORACLE), echo $(FILE); \
 		GOOS=darwin GOARCH=arm64 go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
 	tar cvf - bin/* | gzip > releases/sensu-checks-go.darwin.arm64.tar.gz
 	(cd releases && sha512sum sensu-checks-go.darwin.arm64.tar.gz > sensu-checks-go.darwin.arm64.tar.gz.sha512)
