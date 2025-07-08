@@ -64,32 +64,73 @@ jobs:
       - name: Install Oracle instant client
         run: |
           # Download the Basic and SDK DMG files (23.3.0.23.09)
-          curl -L -o instantclient-basic.dmg https://download.oracle.com/otn_software/mac/instantclient/instantclient-basic-macos-arm64.dmg
-          curl -L -o instantclient-sdk.dmg https://download.oracle.com/otn_software/mac/instantclient/instantclient-sdk-macos-arm64.dmg
+          curl -L -o instantclient-basic.dmg https://download.oracle.com/otn_software/mac/instantclient/2330000/instantclient-basic-macos.arm64-23.3.0.23.09-1.dmg
+          curl -L -o instantclient-sdk.dmg https://download.oracle.com/otn_software/mac/instantclient/2330000/instantclient-sdk-macos.arm64-23.3.0.23.09.dmg
 
           # Mount the DMG files
           hdiutil mount instantclient-basic.dmg
           hdiutil mount instantclient-sdk.dmg
 
+          # List contents to see the structure
+          echo "Contents of mounted volumes:"
+          ls -la /Volumes/instantclient-basic-macos*
+          ls -la /Volumes/instantclient-sdk-macos*
+
           # Create destination directory
           sudo mkdir -p /opt/oracle/instantclient_23_3
 
-          # Copy files from mounted volumes to destination
-          # The DMG contains the files in a subdirectory structure
-          sudo cp -R /Volumes/instantclient-basic-macos.arm64-23.3.0.23.09/* /opt/oracle/instantclient_23_3/
-          sudo cp -R /Volumes/instantclient-sdk-macos.arm64-23.3.0.23.09/sdk /opt/oracle/instantclient_23_3/
+          # The files are likely in a subdirectory, let's find and copy them
+          # Find the instantclient directory within the mounted volume
+          BASIC_DIR=$(find /Volumes/instantclient-basic-macos* -type d -name "instantclient_*" -maxdepth 2 | head -1)
+          SDK_DIR=$(find /Volumes/instantclient-sdk-macos* -type d -name "sdk" -maxdepth 3 | head -1)
+
+          if [ -n "$BASIC_DIR" ]; then
+            echo "Found basic files at: $BASIC_DIR"
+            sudo cp -R "$BASIC_DIR"/* /opt/oracle/instantclient_23_3/
+          else
+            # Alternative: use the install script if present
+            echo "Looking for install script..."
+            INSTALL_SCRIPT=$(find /Volumes/instantclient-basic-macos* -name "install_ic.sh" -maxdepth 2 | head -1)
+            if [ -n "$INSTALL_SCRIPT" ]; then
+              echo "Running install script: $INSTALL_SCRIPT"
+              cd $(dirname "$INSTALL_SCRIPT")
+              sudo mkdir -p /opt/oracle
+              sudo INSTALL_DIR=/opt/oracle "$INSTALL_SCRIPT"
+            fi
+          fi
+
+          if [ -n "$SDK_DIR" ]; then
+            echo "Found SDK files at: $SDK_DIR"
+            sudo cp -R "$SDK_DIR" /opt/oracle/instantclient_23_3/
+          fi
+
+          # If files were installed to default location, move them
+          if [ -d "$HOME/Downloads/instantclient_23_3" ]; then
+            echo "Moving from default location..."
+            sudo cp -R $HOME/Downloads/instantclient_23_3/* /opt/oracle/instantclient_23_3/
+          fi
 
           # Create symbolic links for compatibility
           cd /opt/oracle/instantclient_23_3
-          sudo ln -sf libclntsh.dylib.23.1 libclntsh.dylib
-          sudo ln -sf libocci.dylib.23.1 libocci.dylib
+          for lib in libclntsh.dylib libocci.dylib; do
+            # Find the actual library file
+            actual_lib=$(ls ${lib}.* 2>/dev/null | head -1)
+            if [ -n "$actual_lib" ]; then
+              echo "Creating symlink: $lib -> $actual_lib"
+              sudo ln -sf "$actual_lib" "$lib"
+            fi
+          done
 
           # Unmount the DMG files
-          hdiutil unmount /Volumes/instantclient-basic-macos.arm64-23.3.0.23.09 || true
-          hdiutil unmount /Volumes/instantclient-sdk-macos.arm64-23.3.0.23.09 || true
+          hdiutil unmount /Volumes/instantclient-basic-macos* || true
+          hdiutil unmount /Volumes/instantclient-sdk-macos* || true
 
           # Clean up DMG files
           rm -f instantclient-basic.dmg instantclient-sdk.dmg
+
+          # Verify installation
+          echo "Installation complete. Contents of /opt/oracle/instantclient_23_3:"
+          ls -la /opt/oracle/instantclient_23_3/
       - name: Install staticcheck
         run: |
           go install honnef.co/go/tools/cmd/staticcheck@latest
