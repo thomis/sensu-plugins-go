@@ -26,8 +26,8 @@ jobs:
           mkdir -p /opt && cd /opt
           curl https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-basic-linux.x64-23.8.0.25.04.zip --output instantclient.zip
           curl https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-sdk-linux.x64-23.8.0.25.04.zip --output instantclient_sdk.zip
-          unzip -o ~/opt/instantclient.zip -d ~/opt
-          unzip -o ~/opt/instantclient_sdk.zip -d ~/opt
+          unzip -o ~/opt/instantclient.zip
+          unzip -o ~/opt/instantclient_sdk.zip
 
       - name: Install staticcheck
         run: |
