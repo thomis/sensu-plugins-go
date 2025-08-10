@@ -49,7 +49,7 @@ jobs:
             releases/sensu-checks-go.linux.arm64.tar.gz.sha512
   macOS:
     name: Release for macOS (ARM)
-    runs-on: macos-14
+    runs-on: macos-latest
     env:
       ORACLE_HOME: /opt/oracle/instantclient_23_3
       DYLD_LIBRARY_PATH: /opt/oracle/instantclient_23_3
