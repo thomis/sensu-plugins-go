@@ -19,7 +19,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       ORACLE_HOME: /opt/instantclient_23_8
       LD_LIBRARY_PATH: /opt/instantclient_23_8
       OCI_DIR: /opt/instantclient_23_8
@@ -29,7 +28,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.24.5'
+          go-version: '1.24.6'
           check-latest: true
 
       - name: Install Oracle instant client
@@ -45,16 +44,5 @@ jobs:
           go install honnef.co/go/tools/cmd/staticcheck@latest
           go install golang.org/x/vuln/cmd/govulncheck@latest
 
-      - name: Code Climate setup test reporter
-        run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-          ./cc-test-reporter before-build
-
       - name: Build
         run: make test build
-
-      - name: Code Climate publish test coverage
-        run: |
-          ./cc-test-reporter after-build --prefix github.com/thomis/sensu-plugins-go
-        if: github.event_name != 'pull_request'
