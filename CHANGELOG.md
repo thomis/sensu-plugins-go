@@ -5,6 +5,13 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [2.29.0] - 2025-08-12
+
+### Changed
+
+- Check certificate refactoring and testing
+
 ## [2.28.0] - 2025-08-10
 
 ### Changed
