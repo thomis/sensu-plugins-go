@@ -1,8 +1,6 @@
 module github.com/thomis/sensu-plugins-go
 
-go 1.24
-
-toolchain go1.24.0
+go 1.25.0
 
 require (
 	github.com/bitly/go-simplejson v0.5.1
@@ -33,7 +31,7 @@ require (
 	github.com/tklauser/go-sysconf v0.3.15 // indirect
 	github.com/tklauser/numcpus v0.10.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
-	golang.org/x/exp v0.0.0-20250811191247-51f88131bc50 // indirect
+	golang.org/x/exp v0.0.0-20250813145105-42675adae3e6 // indirect
 	golang.org/x/sys v0.35.0 // indirect
 	google.golang.org/protobuf v1.36.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
