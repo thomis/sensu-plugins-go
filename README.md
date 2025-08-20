@@ -72,7 +72,7 @@ The typical development workflow is:
 1. **Write code and tests** - Implement features with corresponding test coverage
 2. **Run `make`** - Default command that formats, lints, tests, and builds for your local platform
 3. **Create pull request** - Submit changes for review
-4. **Create release** - Manually create a release by triggering the "02 - Test, Build and Release" workflow
+4. **Create release** - Create a release via the GitHub UI, triggering the "02 - Test, Build and Release" workflow
 
 ### Building from Source
 
