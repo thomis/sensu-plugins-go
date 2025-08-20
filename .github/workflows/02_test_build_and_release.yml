@@ -1,4 +1,4 @@
-name: cd
+name: 02 - Test, Build and Release
 on:
   release:
     types: [ published ]
@@ -32,7 +32,7 @@ jobs:
           go install golang.org/x/vuln/cmd/govulncheck@latest
       - name: Build
         run: |
-          make clean_release test lint vul
+          make clean test lint vul
           make build_linux_amd64
           make build_linux_arm64
       - name: Upload release for linux amd64
@@ -140,7 +140,7 @@ jobs:
       - name: Build
         run: |
           sudo sh -c 'echo "#!/bin/sh\nshasum -a 512 \$1" > /usr/local/bin/sha512sum && chmod +x /usr/local/bin/sha512sum'
-          make clean_release test lint vul
+          make clean test lint vul
           make build_darwin_arm64
       - name: Upload release for darwin arm64
         uses: softprops/action-gh-release@v2

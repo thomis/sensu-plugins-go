@@ -7,3 +7,6 @@
 /bin
 /releases
 c.out
+coverage.out
+coverage.html
+test.log
