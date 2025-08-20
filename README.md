@@ -1,5 +1,6 @@
 [![01 - Test and Build](https://github.com/thomis/sensu-plugins-go/actions/workflows/01_test_and_build.yml/badge.svg)](https://github.com/thomis/sensu-plugins-go/actions/workflows/01_test_and_build.yml)
 [![02 - Test, Build and Release](https://github.com/thomis/sensu-plugins-go/actions/workflows/02_test_build_and_release.yml/badge.svg)](https://github.com/thomis/sensu-plugins-go/actions/workflows/02_test_build_and_release.yml)
+[![Latest Release](https://img.shields.io/github/v/release/thomis/sensu-plugins-go)](https://github.com/thomis/sensu-plugins-go/releases/latest)
 
 # sensu-plugins-go
 
@@ -7,7 +8,7 @@ A comprehensive collection of Sensu monitoring plugins and handlers written in G
 
 ## Overview
 
-This project provides production-ready monitoring checks and handlers for Sensu, covering a wide range of services and system metrics. All plugins are compiled into a single compressedbinary for easy deployment.
+This project provides production-ready monitoring checks and handlers for Sensu, covering a wide range of services and system metrics. All plugins are compiled as individual executables and distributed in a compressed tar archive for easy deployment.
 
 ## Components
 
@@ -45,17 +46,21 @@ This project provides production-ready monitoring checks and handlers for Sensu,
 
 ## Installation
 
-Download the latest release from the [Releases](https://github.com/thomis/sensu-plugins-go/releases) page. The binary includes all checks and handlers in a single executable.
+Download the latest release from the [Releases](https://github.com/thomis/sensu-plugins-go/releases) page. The archive contains all checks and handlers as separate executables in a `bin/` directory.
 
 ```bash
-# Extract the archive
+# Extract the archive (creates a bin/ directory with all checks)
 tar -xzf sensu-checks-go.linux.amd64.tar.gz
 
-# Make it executable (if needed)
-chmod +x sensu-checks-go
+# Make executables accessible (if needed)
+chmod +x bin/*
 
 # Run a specific check
-./sensu-checks-go check-disk -w 80 -c 90
+./bin/check-disk -w 80 -c 90
+
+# Or add to PATH for easier access
+export PATH=$PATH:$(pwd)/bin
+check-disk -w 80 -c 90
 ```
 
 ## Development
