@@ -18,7 +18,7 @@ This project provides production-ready monitoring checks and handlers for Sensu,
 | | check-disk | Check disk space usage and available capacity | |
 | | check-memory | Monitor memory usage and swap utilization | |
 | | check-process | Verify processes are running with configurable thresholds | |
-| | check-uptime | Monitor system uptime | |
+| | check-uptime | Monitor system uptime | [README](cmd/check-uptime/README.md) |
 | **Network & Connectivity** | check-ping | ICMP ping check with packet loss and latency monitoring | |
 | | check-http | HTTP/HTTPS endpoint monitoring with response validation | |
 | | check-http-json | JSON API monitoring with response parsing and validation | |
