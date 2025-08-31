@@ -4,11 +4,21 @@
 
 # sensu-plugins-go
 
-A comprehensive collection of Sensu monitoring plugins and handlers written in Go. This repository is part of a fork chain ([hico-horiuchi](https://github.com/hico-horiuchi/sensu-plugins-go) → ... → [thomis](https://github.com/thomis/sensu-plugins-go)) based on Sensu plugins & libraries by Golang, extended with additional functionality for modern infrastructure.
+A comprehensive collection of Sensu monitoring plugins and handlers written in Go. This repository has evolved through community contributions and continues as an independent project with extended functionality for modern infrastructure.
 
 ## Overview
 
 This project provides production-ready monitoring checks and handlers for Sensu, covering a wide range of services and system metrics. All plugins are compiled as individual executables and distributed in a compressed tar archive for easy deployment.
+
+### Fork History
+
+This repository has evolved through several community forks:
+- Original: [hico-horiuchi/sensu-plugins-go](https://github.com/hico-horiuchi/sensu-plugins-go)
+- → [portertech/sensu-plugins-go](https://github.com/portertech/sensu-plugins-go) 
+- → [nixwiz/sensu-plugins-go](https://github.com/nixwiz/sensu-plugins-go)
+- → Current: [thomis/sensu-plugins-go](https://github.com/thomis/sensu-plugins-go)
+
+The current repository has been decoupled from its upstream and continues as an independent project with extended functionality for modern infrastructure. The project has been restructured to follow Go best practices, with each binary organized in its own subfolder under `cmd/` along with dedicated tests and documentation (work in progress).
 
 ## Components
 
