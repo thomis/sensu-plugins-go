@@ -24,7 +24,7 @@ The thomis/sensu-plugins-go repository has been decoupled from its upstream and 
 
 | Category | Component | Description | Documentation |
 |----------|-----------|-------------|---------------|
-| **System Checks** | check-cpu | Monitor CPU usage and alert on high utilization | |
+| **System Checks** | check-cpu | Monitor CPU usage and alert on high utilization | [README](cmd/check-cpu/README.md) |
 | | check-disk | Check disk space usage and available capacity | |
 | | check-memory | Monitor memory usage and swap utilization | |
 | | check-process | Verify processes are running with configurable thresholds | |
