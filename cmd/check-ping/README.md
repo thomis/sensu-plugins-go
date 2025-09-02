@@ -8,7 +8,6 @@ A Sensu check plugin for TCP connectivity testing.
 - **Configurable Timeout**: Set connection timeout in seconds
 - **Port Flexibility**: Test any TCP port (SSH, HTTP, database ports, etc.)
 - **Simple Output**: Returns connection status with host:port information
-- **Cross-Platform Support**: Works on Linux, macOS, Windows, and other platforms
 
 ## Usage
 
