@@ -13,10 +13,10 @@ This project provides production-ready monitoring checks and handlers for Sensu,
 ### Fork History
 
 This repository has evolved through several community forks:
-- Original: [hico-horiuchi/sensu-plugins-go](https://github.com/hico-horiuchi/sensu-plugins-go)
-- → [portertech/sensu-plugins-go](https://github.com/portertech/sensu-plugins-go) 
-- → [nixwiz/sensu-plugins-go](https://github.com/nixwiz/sensu-plugins-go)
-- → Current: [thomis/sensu-plugins-go](https://github.com/thomis/sensu-plugins-go)
+- [hico-horiuchi/sensu-plugins-go](https://github.com/hico-horiuchi/sensu-plugins-go) (original)
+- [portertech/sensu-plugins-go](https://github.com/portertech/sensu-plugins-go)
+- [nixwiz/sensu-plugins-go](https://github.com/nixwiz/sensu-plugins-go)
+- [thomis/sensu-plugins-go](https://github.com/thomis/sensu-plugins-go) (decoupled)
 
 The current repository has been decoupled from its upstream and continues as an independent project with extended functionality for modern infrastructure. The project has been restructured to follow Go best practices, with each binary organized in its own subfolder under `cmd/` along with dedicated tests and documentation (work in progress).
 
