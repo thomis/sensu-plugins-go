@@ -18,7 +18,7 @@ This repository has evolved through several community forks:
 - [nixwiz/sensu-plugins-go](https://github.com/nixwiz/sensu-plugins-go)
 - [thomis/sensu-plugins-go](https://github.com/thomis/sensu-plugins-go) (decoupled)
 
-The current repository has been decoupled from its upstream and continues as an independent project with extended functionality for modern infrastructure. The project has been restructured to follow Go best practices, with each binary organized in its own subfolder under `cmd/` along with dedicated tests and documentation (work in progress).
+The thomis/sensu-plugins-go repository has been decoupled from its upstream and continues as an independent project with extended functionality for modern infrastructure. The project has been restructured to follow Go best practices, with each binary organized in its own subfolder under `cmd/` along with dedicated tests and documentation (work in progress).
 
 ## Components
 
