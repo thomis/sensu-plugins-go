@@ -25,9 +25,9 @@ The thomis/sensu-plugins-go repository has been decoupled from its upstream and 
 | Category | Component | Description | Documentation |
 |----------|-----------|-------------|---------------|
 | **System Checks** | check-cpu | Monitor CPU usage and alert on high utilization | [README](cmd/check-cpu/README.md) |
-| | check-disk | Check disk space usage and available capacity | |
-| | check-memory | Monitor memory usage and swap utilization | |
-| | check-process | Verify processes are running with configurable thresholds | |
+| | check-disk | Check disk space usage and available capacity | [README](cmd/check-disk/README.md) |
+| | check-memory | Monitor memory usage and swap utilization | [README](cmd/check-memory/README.md) |
+| | check-process | Verify processes are running with configurable thresholds | [README](cmd/check-process/README.md) |
 | | check-uptime | Monitor system uptime | [README](cmd/check-uptime/README.md) |
 | **Network & Connectivity** | check-ping | ICMP ping check with packet loss and latency monitoring | |
 | | check-http | HTTP/HTTPS endpoint monitoring with response validation | |
