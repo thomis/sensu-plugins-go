@@ -29,9 +29,9 @@ The thomis/sensu-plugins-go repository has been decoupled from its upstream and 
 | | check-memory | Monitor memory usage and swap utilization | [README](cmd/check-memory/README.md) |
 | | check-process | Verify processes are running with configurable thresholds | [README](cmd/check-process/README.md) |
 | | check-uptime | Monitor system uptime | [README](cmd/check-uptime/README.md) |
-| **Network & Connectivity** | check-ping | ICMP ping check with packet loss and latency monitoring | |
-| | check-http | HTTP/HTTPS endpoint monitoring with response validation | |
-| | check-http-json | JSON API monitoring with response parsing and validation | |
+| **Network & Connectivity** | check-ping | ICMP ping check with packet loss and latency monitoring | [README](cmd/check-ping/README.md) |
+| | check-http | HTTP/HTTPS endpoint monitoring with response validation | [README](cmd/check-http/README.md) |
+| | check-http-json | JSON API monitoring with response parsing and validation | [README](cmd/check-http-json/README.md) |
 | | check-certificate | SSL/TLS certificate expiration and validation | [README](cmd/check-certificate/README.md) |
 | **Database Monitoring** | check-postgres | PostgreSQL connectivity and query performance | |
 | | check-mysql-ping | MySQL connectivity check | |
