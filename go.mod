@@ -1,6 +1,6 @@
 module github.com/thomis/sensu-plugins-go
 
-go 1.25.0
+go 1.25.1
 
 require (
 	github.com/bitly/go-simplejson v0.5.1
@@ -11,7 +11,7 @@ require (
 	github.com/lib/pq v1.10.9
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/shirou/gopsutil/v4 v4.25.8
-	github.com/spf13/pflag v1.0.9
+	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.11.1
 )
 
