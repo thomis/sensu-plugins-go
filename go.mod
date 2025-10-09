@@ -6,7 +6,7 @@ require (
 	github.com/bitly/go-simplejson v0.5.1
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/godror/godror v0.49.3
-	github.com/gomodule/redigo v1.9.2
+	github.com/gomodule/redigo v1.9.3
 	github.com/hico-horiuchi/ohgibone v0.22.1
 	github.com/lib/pq v1.10.9
 	github.com/shirou/gopsutil/v3 v3.24.5
