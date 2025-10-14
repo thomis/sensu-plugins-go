@@ -5,7 +5,7 @@ go 1.25.1
 require (
 	github.com/bitly/go-simplejson v0.5.1
 	github.com/go-sql-driver/mysql v1.9.3
-	github.com/godror/godror v0.49.3
+	github.com/godror/godror v0.49.4
 	github.com/gomodule/redigo v1.9.3
 	github.com/hico-horiuchi/ohgibone v0.22.1
 	github.com/lib/pq v1.10.9
@@ -23,7 +23,7 @@ require (
 	github.com/go-logfmt/logfmt v0.6.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/godror/knownpb v0.3.0 // indirect
-	github.com/lufia/plan9stats v0.0.0-20250827001030-24949be3fa54 // indirect
+	github.com/lufia/plan9stats v0.0.0-20251013123823-9fd1530e3ec3 // indirect
 	github.com/oklog/ulid/v2 v2.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
