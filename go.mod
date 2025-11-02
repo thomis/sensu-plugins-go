@@ -10,7 +10,7 @@ require (
 	github.com/hico-horiuchi/ohgibone v0.22.1
 	github.com/lib/pq v1.10.9
 	github.com/shirou/gopsutil/v3 v3.24.5
-	github.com/shirou/gopsutil/v4 v4.25.9
+	github.com/shirou/gopsutil/v4 v4.25.10
 	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.11.1
 )
@@ -31,7 +31,7 @@ require (
 	github.com/tklauser/go-sysconf v0.3.15 // indirect
 	github.com/tklauser/numcpus v0.10.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
-	golang.org/x/exp v0.0.0-20251017212417-90e834f514db // indirect
+	golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546 // indirect
 	golang.org/x/sys v0.37.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
