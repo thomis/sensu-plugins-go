@@ -5,11 +5,12 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.46.0] - 2026-02-06
+## [2.47.0] - 2026-02-10
 
 ### Changed
 
-- Update dependencies (go 1.25.7)
+- Update dependencies (go 1.26.0)
+- Align version numbering with GitHub releases
   
 ## [2.45.0] - 2026-02-03
 
