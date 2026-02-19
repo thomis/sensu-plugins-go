@@ -102,7 +102,7 @@ make help
 ```
 
 ### Requirements
-- Go 1.25.0 or later
+- Go 1.26.0 or later
 - Oracle Instant Client SDK (for Oracle checks)
 - Make
 
