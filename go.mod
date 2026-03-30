@@ -8,7 +8,7 @@ require (
 	github.com/godror/godror v0.50.0
 	github.com/gomodule/redigo v1.9.3
 	github.com/hico-horiuchi/ohgibone v0.22.1
-	github.com/lib/pq v1.12.0
+	github.com/lib/pq v1.12.1
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/shirou/gopsutil/v4 v4.26.2
 	github.com/spf13/pflag v1.0.10
@@ -23,7 +23,7 @@ require (
 	github.com/go-logfmt/logfmt v0.6.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/godror/knownpb v0.3.0 // indirect
-	github.com/lufia/plan9stats v0.0.0-20260324052639-156f7da3f749 // indirect
+	github.com/lufia/plan9stats v0.0.0-20260330125221-c963978e514e // indirect
 	github.com/oklog/ulid/v2 v2.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
