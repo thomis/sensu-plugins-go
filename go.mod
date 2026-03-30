@@ -8,7 +8,7 @@ require (
 	github.com/godror/godror v0.50.0
 	github.com/gomodule/redigo v1.9.3
 	github.com/hico-horiuchi/ohgibone v0.22.1
-	github.com/lib/pq v1.12.0
+	github.com/lib/pq v1.12.1
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/shirou/gopsutil/v4 v4.26.2
 	github.com/spf13/pflag v1.0.10
