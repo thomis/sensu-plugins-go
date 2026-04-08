@@ -5,6 +5,12 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.54.0] - 2026-04-08
+
+### Changed
+
+- Update dependencies (go 1.26.2)
+
 ## [2.53.0] - 2026-03-18
 
 ### Changed
