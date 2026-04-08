@@ -1,6 +1,6 @@
 [![01 - Test and Build](https://github.com/thomis/sensu-plugins-go/actions/workflows/01_test_and_build.yml/badge.svg)](https://github.com/thomis/sensu-plugins-go/actions/workflows/01_test_and_build.yml)
 [![02 - Test, Build and Release](https://github.com/thomis/sensu-plugins-go/actions/workflows/02_test_build_and_release.yml/badge.svg)](https://github.com/thomis/sensu-plugins-go/actions/workflows/02_test_build_and_release.yml)
-[![Latest Release](https://img.shields.io/github/v/release/thomis/sensu-plugins-go)](https://github.com/thomis/sensu-plugins-go/releases/latest)
+[![Latest Release](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Fthomis%2Fsensu-plugins-go%2Freleases%2Flatest&query=%24.tag_name&label=release)](https://github.com/thomis/sensu-plugins-go/releases/latest)
 
 # sensu-plugins-go
 
