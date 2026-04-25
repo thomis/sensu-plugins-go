@@ -46,9 +46,9 @@ update:
 	@go get -u ./...
 
 test:
-	@echo "\nRunning tests with coverage..."
+	@echo "\nRunning tests with race detection and coverage..."
 	@echo "------------------------------"
-	@go test -coverprofile=coverage.out ./... 2>&1 | tee test.log
+	@go test -race -coverprofile=coverage.out ./... 2>&1 | tee test.log
 	@echo "\nGenerating HTML coverage report..."
 	@go tool cover -html=coverage.out -o coverage.html
 	@echo "\nOverall test coverage:"
