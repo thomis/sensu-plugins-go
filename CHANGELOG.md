@@ -5,6 +5,12 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.56.1] - 2026-05-09
+
+### Changed
+
+- Update dependencies
+
 ## [2.56.0] - 2026-05-07
 
 ### Changed
