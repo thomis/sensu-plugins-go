@@ -39,7 +39,7 @@ func main() {
 	c.Init()
 
 	if len(file) > 0 {
-		response, err = filePing(oracle.FileParams{File: file, Timeout: timeout})
+		response, err = filePing(oracle.FileParams{File: file, Timeout: timeout}, singlePing)
 	} else {
 		connection := oracle.Connection{Username: username, Password: password, Database: database, Timeout: timeout}
 		response, err = singlePing(connection)
@@ -53,16 +53,22 @@ func main() {
 	c.Ok(response)
 }
 
-func filePing(fileParams oracle.FileParams) (string, error) {
+// pingRunner pings a single connection. main wires in singlePing; tests inject a
+// fake to exercise the batch orchestration without a database.
+type pingRunner func(connection oracle.Connection) (string, error)
+
+func filePing(fileParams oracle.FileParams, ping pingRunner) (string, error) {
 	connections, err := oracle.ParseConnectionsFromFile(fileParams)
 	if err != nil {
 		return "", err
 	}
 
-	channel := make(chan (task))
+	// Buffered so stragglers can send and exit even after an overall timeout,
+	// avoiding leaked goroutines.
+	channel := make(chan task, len(*connections))
 	for _, c := range *connections {
 		go func(c oracle.Connection) {
-			_, err := singlePing(c)
+			_, err := ping(c)
 
 			channel <- task{
 				connection: &c,
@@ -111,7 +117,13 @@ func singlePing(connection oracle.Connection) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), connection.Timeout)
 	defer cancel()
 
-	err = db.PingContext(ctx)
+	return execPing(ctx, db)
+}
+
+// execPing pings an open database handle. It is separated from connection
+// handling so it can be tested with a mocked database.
+func execPing(ctx context.Context, db *sql.DB) (string, error) {
+	err := db.PingContext(ctx)
 	if err != nil {
 		if ctx.Err() != nil {
 			return "", fmt.Errorf("timeout reached")

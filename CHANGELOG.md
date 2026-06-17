@@ -5,6 +5,20 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.60.0] - 2026-06-17
+
+### Added
+
+- New `check-oracle-query` plugin: runs a custom SQL query or PL/SQL block (procedure/function) that returns a status (`ok`/`warn`/`warning`/`error`) and a message, mapping the status to the corresponding Sensu exit code. The query can be passed inline (`-q`) or from a file (`--query-file`). Batch mode (`-f`) runs the same query against multiple connections in parallel (worst-status-wins), consistent with `check-oracle-ping` and `check-oracle-validity`.
+
+### Changed
+
+- Refactored the Oracle checks (`check-oracle-ping`, `check-oracle-validity`, `check-oracle-query`) to separate database execution from connection handling and to inject the per-connection runner, substantially increasing unit-test coverage (mocked DB via `go-sqlmock`).
+
+### Fixed
+
+- Oracle batch mode no longer leaks goroutines when the overall timeout is reached (result channel is now buffered).
+
 ## [2.59.0] - 2026-06-17
 
 ### Fixed
