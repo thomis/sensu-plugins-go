@@ -21,6 +21,9 @@ jobs:
       - name: Install build dependencies
         run: |
           dnf -y install gcc make tar gzip unzip git findutils glibc-devel libaio
+          # Container runs as root while the workspace is owned by the runner
+          # user; allow git (used by Go VCS stamping / staticcheck) to operate on it.
+          git config --global --add safe.directory '*'
       - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
