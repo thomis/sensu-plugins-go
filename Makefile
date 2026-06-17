@@ -2,6 +2,8 @@ BUILDOPT := -ldflags '-s -w'
 SOURCES  := $(shell find cmd -type f -name "*.go" -not -name "*_test.go")
 # Fix: Properly find non-oracle Go files, excluding test files
 SOURCES_NO_ORACLE := $(shell find cmd -type f -name "*.go" -not -path "*oracle*" -not -name "*_test.go")
+# Oracle plugins require CGO (godror) and are built separately
+SOURCES_ORACLE := $(shell find cmd -type f -name "*.go" -path "*oracle*" -not -name "*_test.go")
 BINARIES := $(wildcard bin/*)
 GREEN := \033[32m
 RESET := \033[0m
@@ -90,8 +92,12 @@ build_linux_amd64:
 	@echo "\nbuilding for linux.amd64..."
 	@echo "---------------------------"
 	@mkdir -p bin releases
-	@$(foreach FILE, $(SOURCES), echo $(FILE); \
-		GOOS=linux GOARCH=amd64 go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
+	@echo "Pure-Go plugins (CGO disabled -> fully static, glibc independent)"
+	@$(foreach FILE, $(SOURCES_NO_ORACLE), echo $(FILE); \
+		CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
+	@echo "Oracle plugins (CGO enabled -> dynamically linked against build host glibc)"
+	@$(foreach FILE, $(SOURCES_ORACLE), echo $(FILE); \
+		CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
 	tar cvf - bin/* | gzip > releases/sensu-checks-go.linux.amd64.tar.gz
 	(cd releases && sha512sum sensu-checks-go.linux.amd64.tar.gz > sensu-checks-go.linux.amd64.tar.gz.sha512)
 
@@ -100,7 +106,7 @@ build_linux_arm64:
 	@echo "---------------------------"
 	@mkdir -p bin releases
 	@$(foreach FILE, $(SOURCES_NO_ORACLE), echo $(FILE); \
-		GOOS=linux GOARCH=arm64 go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
+		CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build $(BUILDOPT) -o bin/`basename $(FILE) .go` $(FILE);)
 	tar cvf - bin/* | gzip > releases/sensu-checks-go.linux.arm64.tar.gz
 	(cd releases && sha512sum sensu-checks-go.linux.arm64.tar.gz > sensu-checks-go.linux.arm64.tar.gz.sha512)
 

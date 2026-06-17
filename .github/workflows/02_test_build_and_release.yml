@@ -6,12 +6,21 @@ jobs:
   linux:
     name: Release for Linux
     runs-on: ubuntu-latest
+    # Build inside a glibc 2.28 image (RHEL 8 family, same as Rocky Linux 8 /
+    # Fargate target). The pure-Go plugins are built static (CGO disabled), but
+    # the Oracle plugins require CGO and link dynamically against the build host
+    # glibc -- building on glibc 2.28 keeps them runnable on Rocky Linux 8.
+    container:
+      image: rockylinux:8
     env:
       ORACLE_HOME: /opt/instantclient_23_8
       LD_LIBRARY_PATH: /opt/instantclient_23_8
       OCI_DIR: /opt/instantclient_23_8
       NLS_LANG: AMERICAN_AMERICA.AL32UTF8
     steps:
+      - name: Install build dependencies
+        run: |
+          dnf -y install gcc make tar gzip unzip git findutils glibc-devel libaio
       - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
@@ -19,11 +28,11 @@ jobs:
           check-latest: true
       - name: Install Oracle instant client
         run: |
-          sudo mkdir -p /opt && cd /opt
-          sudo curl https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-basic-linux.x64-23.8.0.25.04.zip --output instantclient.zip
-          sudo curl https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-sdk-linux.x64-23.8.0.25.04.zip --output instantclient_sdk.zip
-          sudo unzip -o instantclient.zip
-          sudo unzip -o instantclient_sdk.zip
+          mkdir -p /opt && cd /opt
+          curl -fsSL https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-basic-linux.x64-23.8.0.25.04.zip --output instantclient.zip
+          curl -fsSL https://download.oracle.com/otn_software/linux/instantclient/2380000/instantclient-sdk-linux.x64-23.8.0.25.04.zip --output instantclient_sdk.zip
+          unzip -o instantclient.zip
+          unzip -o instantclient_sdk.zip
       - name: Install staticcheck
         run: |
           go install honnef.co/go/tools/cmd/staticcheck@latest

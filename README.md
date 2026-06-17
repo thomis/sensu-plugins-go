@@ -112,6 +112,17 @@ make help
 - **Linux**: AMD64, ARM64
 - **macOS**: ARM64 (Apple Silicon)
 
+### Linux Compatibility (glibc)
+
+Since **release 2.59**, Linux release binaries are built for broad compatibility across distributions, including older glibc runtimes such as Rocky Linux 8 / RHEL 8 (glibc 2.28) and container platforms like AWS Fargate. (Earlier releases were built against a newer glibc and may fail on such runtimes.)
+
+- **Most plugins are statically linked** (built with `CGO_ENABLED=0`) and have **no glibc dependency at all** — they run on any Linux distribution.
+- **The Oracle plugins** (`check-oracle-ping`, `check-oracle-validity`) require CGO (`godror`) and are therefore dynamically linked. To keep them runnable on older runtimes, the Linux release is **built inside a Rocky Linux 8 (glibc 2.28) container**, so these binaries run on **glibc 2.28 and newer** (RHEL/Rocky/Alma 8+, Ubuntu 18.04+, Debian 10+, …).
+
+Because glibc is backward compatible, a binary linked against an older glibc also runs on newer ones — so a single set of artifacts covers both old and current distributions.
+
+> If you see an error like `version 'GLIBC_2.34' not found`, you are running a binary that was linked against a newer glibc than the host provides. Use the official release artifacts (built as described above) or rebuild on a matching/older glibc.
+
 ### Oracle Components
 The Oracle-based checks (`check-oracle-ping`, `check-oracle-validity`) require Oracle Instant Client libraries to be installed on the system. These components may have platform restrictions based on Oracle's library availability.
 

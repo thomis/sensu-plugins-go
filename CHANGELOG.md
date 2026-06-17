@@ -5,6 +5,12 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.59.0] - 2026-06-17
+
+### Fixed
+
+- Build Linux release binaries for broad glibc compatibility. Pure-Go plugins are now linked statically (`CGO_ENABLED=0`), and the CGO-based Oracle plugins are built inside a Rocky Linux 8 (glibc 2.28) container. Release artifacts now run on older runtimes such as RHEL/Rocky 8 and AWS Fargate, fixing `GLIBC_2.xx not found` errors.
+
 ## [2.58.0] - 2026-06-12
 
 ### Changed
