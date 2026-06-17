@@ -41,7 +41,7 @@ func main() {
 	c.Init()
 
 	if len(file) > 0 {
-		response, err = fileValidity(oracle.FileParams{File: file, Timeout: timeout, ExcludeTypes: excludeTypes})
+		response, err = fileValidity(oracle.FileParams{File: file, Timeout: timeout, ExcludeTypes: excludeTypes}, singleValidity)
 	} else {
 		connection := oracle.Connection{Username: username, Password: password, Database: database, Timeout: timeout, ExcludeTypes: excludeTypes}
 		response, err = singleValidity(connection)
@@ -55,16 +55,22 @@ func main() {
 	c.Ok(response)
 }
 
-func fileValidity(fileParams oracle.FileParams) (string, error) {
+// validityRunner checks a single connection. main wires in singleValidity; tests
+// inject a fake to exercise the batch orchestration without a database.
+type validityRunner func(connection oracle.Connection) (string, error)
+
+func fileValidity(fileParams oracle.FileParams, validity validityRunner) (string, error) {
 	connections, err := oracle.ParseConnectionsFromFile(fileParams)
 	if err != nil {
 		return "", err
 	}
 
-	channel := make(chan (task))
+	// Buffered so stragglers can send and exit even after an overall timeout,
+	// avoiding leaked goroutines.
+	channel := make(chan task, len(*connections))
 	for _, c := range *connections {
 		go func(c oracle.Connection) {
-			_, err := singleValidity(c)
+			_, err := validity(c)
 
 			channel <- task{
 				connection: &c,
@@ -113,6 +119,12 @@ func singleValidity(connection oracle.Connection) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), connection.Timeout)
 	defer cancel()
 
+	return execValidity(ctx, db, connection.ExcludeTypes)
+}
+
+// execValidity queries an open database handle for invalid objects. It is
+// separated from connection handling so it can be tested with a mocked database.
+func execValidity(ctx context.Context, db *sql.DB, excludeTypes []string) (string, error) {
 	var (
 		objectType string
 		objectName string
@@ -122,8 +134,8 @@ func singleValidity(connection oracle.Connection) (string, error) {
 	)
 
 	stmt := "select object_type, object_name from user_objects where status = 'INVALID'"
-	if len(connection.ExcludeTypes) > 0 {
-		stmt = fmt.Sprintf("%s and object_type not in ('%s')", stmt, strings.Join(connection.ExcludeTypes, "','"))
+	if len(excludeTypes) > 0 {
+		stmt = fmt.Sprintf("%s and object_type not in ('%s')", stmt, strings.Join(excludeTypes, "','"))
 	}
 	stmt += " order by object_type, object_name"
 

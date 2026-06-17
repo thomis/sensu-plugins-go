@@ -38,6 +38,7 @@ The thomis/sensu-plugins-go repository has been decoupled from its upstream and 
 | | check-mysql-processes | Monitor MySQL process list and connections | |
 | | check-oracle-ping | Oracle database connectivity | [README](cmd/check-oracle-ping/README.md) |
 | | check-oracle-validity | Oracle database object validity checks | [README](cmd/check-oracle-validity/README.md) |
+| | check-oracle-query | Run a custom Oracle query/procedure that returns status and message | [README](cmd/check-oracle-query/README.md) |
 | | check-redis | Redis server monitoring | |
 | **Application Services** | check-elasticsearch | Elasticsearch cluster health monitoring | |
 | | check-nginx | Nginx status and performance metrics | |
