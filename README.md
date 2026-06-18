@@ -35,12 +35,12 @@ The thomis/sensu-plugins-go repository has been decoupled from its upstream and 
 | | check-certificate | SSL/TLS certificate expiration and validation | [README](cmd/check-certificate/README.md) |
 | **Database Monitoring** | check-postgres | PostgreSQL connectivity and version check | [README](cmd/check-postgres/README.md) |
 | | check-postgres-query | Run a custom PostgreSQL query/function that returns status and message | [README](cmd/check-postgres-query/README.md) |
-| | check-mysql-ping | MySQL connectivity check | |
-| | check-mysql-processes | Monitor MySQL process list and connections | |
+| | check-mysql-ping | MySQL connectivity check | [README](cmd/check-mysql-ping/README.md) |
+| | check-mysql-processes | Monitor MySQL process list and connections | [README](cmd/check-mysql-processes/README.md) |
 | | check-oracle-ping | Oracle database connectivity | [README](cmd/check-oracle-ping/README.md) |
 | | check-oracle-validity | Oracle database object validity checks | [README](cmd/check-oracle-validity/README.md) |
 | | check-oracle-query | Run a custom Oracle query/procedure that returns status and message | [README](cmd/check-oracle-query/README.md) |
-| | check-redis | Redis server monitoring | |
+| | check-redis | Redis server monitoring | [README](cmd/check-redis/README.md) |
 | **Application Services** | check-elasticsearch | Elasticsearch cluster health monitoring | |
 | | check-nginx | Nginx status and performance metrics | |
 | | check-postfix | Postfix mail server monitoring | |
