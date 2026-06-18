@@ -41,11 +41,11 @@ The thomis/sensu-plugins-go repository has been decoupled from its upstream and 
 | | check-oracle-validity | Oracle database object validity checks | [README](cmd/check-oracle-validity/README.md) |
 | | check-oracle-query | Run a custom Oracle query/procedure that returns status and message | [README](cmd/check-oracle-query/README.md) |
 | | check-redis | Redis server monitoring | [README](cmd/check-redis/README.md) |
-| **Application Services** | check-elasticsearch | Elasticsearch cluster health monitoring | |
-| | check-nginx | Nginx status and performance metrics | |
-| | check-postfix | Postfix mail server monitoring | |
-| | check-postfix-queue | Monitor Postfix queue size | |
-| | check-rabbitmq | RabbitMQ queue and cluster monitoring | |
+| **Application Services** | check-elasticsearch | Elasticsearch cluster health monitoring | [README](cmd/check-elasticsearch/README.md) |
+| | check-nginx | Nginx status and performance metrics | [README](cmd/check-nginx/README.md) |
+| | check-postfix | Postfix mail server monitoring | [README](cmd/check-postfix/README.md) |
+| | check-postfix-queue | Monitor Postfix queue size | [README](cmd/check-postfix-queue/README.md) |
+| | check-rabbitmq | RabbitMQ queue and cluster monitoring | [README](cmd/check-rabbitmq/README.md) |
 | **Metrics Collection** | metrics-cpu | Collect CPU metrics in Graphite format | |
 | | metrics-disk | Disk usage metrics collection | |
 | | metrics-memory | Memory usage metrics | |

@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Documented all database checks with READMEs (`check-postgres`, `check-mysql-ping`, `check-mysql-processes`, `check-redis`).
+- Documented all application service checks with READMEs (`check-elasticsearch`, `check-nginx`, `check-postfix`, `check-postfix-queue`, `check-rabbitmq`).
 - Separated pure logic from system/database I/O across several checks (`check-cpu`, `check-memory`, `check-uptime`, `check-ping`, `check-process`, `check-postgres`, `check-mysql-ping`, `check-mysql-processes`, `check-nginx`) and added focused unit tests, raising overall statement coverage from ~30% to over 41%.
 
 ### Fixed
