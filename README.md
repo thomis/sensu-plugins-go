@@ -46,15 +46,15 @@ The thomis/sensu-plugins-go repository has been decoupled from its upstream and 
 | | check-postfix | Postfix mail server monitoring | [README](cmd/check-postfix/README.md) |
 | | check-postfix-queue | Monitor Postfix queue size | [README](cmd/check-postfix-queue/README.md) |
 | | check-rabbitmq | RabbitMQ queue and cluster monitoring | [README](cmd/check-rabbitmq/README.md) |
-| **Metrics Collection** | metrics-cpu | Collect CPU metrics in Graphite format | |
-| | metrics-disk | Disk usage metrics collection | |
-| | metrics-memory | Memory usage metrics | |
-| | metrics-traffic | Network traffic metrics | |
-| | metrics-snmp | SNMP metrics collection | |
-| **Event Handlers** | handler-slack | Send alerts to Slack channels | |
-| | handler-elasticsearch | Index events in Elasticsearch | |
-| | handler-hubot | Send notifications to Hubot | |
-| | handler-delete | Clean up stale check results | |
+| **Metrics Collection** | metrics-cpu | Collect CPU metrics in Graphite format | [README](cmd/metrics-cpu/README.md) |
+| | metrics-disk | Disk usage metrics collection | [README](cmd/metrics-disk/README.md) |
+| | metrics-memory | Memory usage metrics | [README](cmd/metrics-memory/README.md) |
+| | metrics-traffic | Network traffic metrics | [README](cmd/metrics-traffic/README.md) |
+| | metrics-snmp | SNMP metrics collection | [README](cmd/metrics-snmp/README.md) |
+| **Event Handlers** | handler-slack | Send alerts to Slack channels | [README](cmd/handler-slack/README.md) |
+| | handler-elasticsearch | Index events in Elasticsearch | [README](cmd/handler-elasticsearch/README.md) |
+| | handler-hubot | Send notifications to Hubot | [README](cmd/handler-hubot/README.md) |
+| | handler-delete | Clean up stale check results | [README](cmd/handler-delete/README.md) |
 
 ## Installation
 
