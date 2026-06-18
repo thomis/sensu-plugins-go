@@ -8,6 +8,7 @@ import (
 
 	"github.com/godror/godror"
 	"github.com/thomis/sensu-plugins-go/pkg/check"
+	"github.com/thomis/sensu-plugins-go/pkg/dbquery"
 	"github.com/thomis/sensu-plugins-go/pkg/oracle"
 )
 
@@ -35,7 +36,7 @@ func main() {
 
 	// Resolving the query text is a configuration concern; failures here are
 	// usage errors (exit 3) rather than a database problem.
-	stmt, err := oracle.ReadQuery(query, queryFile)
+	stmt, err := dbquery.ReadQuery(query, queryFile)
 	if err != nil {
 		c.Error(err)
 		return
@@ -60,7 +61,7 @@ func main() {
 		return
 	}
 
-	status, err = oracle.NormalizeStatus(status)
+	status, err = dbquery.NormalizeStatus(status)
 	if err != nil {
 		c.Error(err)
 		return
@@ -99,10 +100,10 @@ func batchQuery(fileParams oracle.FileParams, stmt string, run queryRunner) (str
 
 	// Buffered so stragglers can send and exit even after an overall timeout,
 	// avoiding leaked goroutines.
-	channel := make(chan oracle.QueryOutcome, len(*connections))
+	channel := make(chan dbquery.QueryOutcome, len(*connections))
 	for _, c := range *connections {
 		go func(c oracle.Connection) {
-			outcome := oracle.QueryOutcome{Label: fmt.Sprintf("%s (%s@%s)", c.Label, c.Username, c.Database)}
+			outcome := dbquery.QueryOutcome{Label: fmt.Sprintf("%s (%s@%s)", c.Label, c.Username, c.Database)}
 
 			status, message, err := run(c, stmt)
 			switch {
@@ -110,7 +111,7 @@ func batchQuery(fileParams oracle.FileParams, stmt string, run queryRunner) (str
 				outcome.Status = "critical"
 				outcome.Message = err.Error()
 			default:
-				normalized, nerr := oracle.NormalizeStatus(status)
+				normalized, nerr := dbquery.NormalizeStatus(status)
 				if nerr != nil {
 					outcome.Status = "critical"
 					outcome.Message = nerr.Error()
@@ -125,7 +126,7 @@ func batchQuery(fileParams oracle.FileParams, stmt string, run queryRunner) (str
 	}
 
 	total := len(*connections)
-	outcomes := make([]oracle.QueryOutcome, 0, total)
+	outcomes := make([]dbquery.QueryOutcome, 0, total)
 	timeout := time.After(fileParams.Timeout)
 
 	for i := 0; i < total; i++ {
@@ -137,7 +138,7 @@ func batchQuery(fileParams oracle.FileParams, stmt string, run queryRunner) (str
 		}
 	}
 
-	status, output := oracle.AggregateQueryOutcomes(outcomes)
+	status, output := dbquery.AggregateQueryOutcomes(outcomes)
 	return status, output, nil
 }
 
@@ -173,7 +174,7 @@ func execQuery(ctx context.Context, db *sql.DB, stmt string) (string, string, er
 		message string
 	)
 
-	if oracle.IsPLSQL(stmt) {
+	if dbquery.IsPLSQL(stmt) {
 		_, err := db.ExecContext(ctx, stmt,
 			sql.Named("status", sql.Out{Dest: &status}),
 			sql.Named("message", sql.Out{Dest: &message}))

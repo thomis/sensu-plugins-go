@@ -21,13 +21,25 @@ func main() {
 	c.Option.Int64VarP(&timeout, "timeout", "t", 5, "TIMEOUT")
 	c.Init()
 
-	address := host + ":" + strconv.Itoa(port)
-	conn, err := net.DialTimeout("tcp", address, time.Duration(timeout)*time.Second)
-
+	address, err := checkConnection(host, port, timeout)
 	if err != nil {
 		c.Error(err)
+		return
+	}
+
+	c.Ok(address)
+}
+
+// checkConnection attempts a TCP connection to host:port within the timeout
+// (seconds). It returns the dialed address and any connection error.
+func checkConnection(host string, port int, timeout int64) (string, error) {
+	address := host + ":" + strconv.Itoa(port)
+
+	conn, err := net.DialTimeout("tcp", address, time.Duration(timeout)*time.Second)
+	if err != nil {
+		return address, err
 	}
 	defer conn.Close()
 
-	c.Ok(address)
+	return address, nil
 }

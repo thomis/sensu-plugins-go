@@ -33,46 +33,54 @@ func main() {
 	session.Connection.Database = "mysql"
 	session.handleArguments()
 
-	crits := strings.Split(session.Critical, ":")
-	warns := strings.Split(session.Warning, ":")
-
-	session.CritMin, err = strconv.ParseInt(crits[0], 10, 64)
+	session.CritMin, session.CritMax, session.WarnMin, session.WarnMax, err = parseThresholds(session.Critical, session.Warning)
 	if err != nil {
 		session.Check.Error(err)
-	}
-	if len(crits) > 1 {
-		session.CritMax, err = strconv.ParseInt(crits[1], 10, 64)
-		if err != nil {
-			session.Check.Error(err)
-		}
-	} else {
-		session.CritMax = 0
-	}
-	session.WarnMin, err = strconv.ParseInt(warns[0], 10, 64)
-	if err != nil {
-		session.Check.Error(err)
-	}
-	if len(warns) > 1 {
-		session.WarnMax, err = strconv.ParseInt(warns[1], 10, 64)
-		if err != nil {
-			session.Check.Error(err)
-		}
-	} else {
-		session.WarnMax = 0
-	}
-	if session.CritMax > 0 && session.CritMin > session.CritMax {
-		session.Check.Error(fmt.Errorf("critical argument %s invalid, min %d is greater than max %d", session.Critical, session.CritMin, session.CritMax))
-	}
-	if session.WarnMax > 0 && session.WarnMin > session.WarnMax {
-		session.Check.Error(fmt.Errorf("warning argument %s invalid, min %d is greater than max %d", session.Warning, session.WarnMin, session.WarnMax))
+		return
 	}
 
 	session.ProcessCount, err = selectProcessCount(session.Connection)
 	if err != nil {
 		session.Check.Error(err)
+		return
 	}
 
 	session.report()
+}
+
+// parseThresholds parses "min:max" critical and warning arguments (max is
+// optional) and validates that min does not exceed max.
+func parseThresholds(critical, warning string) (critMin, critMax, warnMin, warnMax int64, err error) {
+	crits := strings.Split(critical, ":")
+	warns := strings.Split(warning, ":")
+
+	if critMin, err = strconv.ParseInt(crits[0], 10, 64); err != nil {
+		return
+	}
+	if len(crits) > 1 {
+		if critMax, err = strconv.ParseInt(crits[1], 10, 64); err != nil {
+			return
+		}
+	}
+	if warnMin, err = strconv.ParseInt(warns[0], 10, 64); err != nil {
+		return
+	}
+	if len(warns) > 1 {
+		if warnMax, err = strconv.ParseInt(warns[1], 10, 64); err != nil {
+			return
+		}
+	}
+
+	if critMax > 0 && critMin > critMax {
+		err = fmt.Errorf("critical argument %s invalid, min %d is greater than max %d", critical, critMin, critMax)
+		return
+	}
+	if warnMax > 0 && warnMin > warnMax {
+		err = fmt.Errorf("warning argument %s invalid, min %d is greater than max %d", warning, warnMin, warnMax)
+		return
+	}
+
+	return
 }
 
 func (s *session) handleArguments() {
@@ -102,8 +110,6 @@ func (s *session) report() {
 }
 
 func selectProcessCount(connection common.Connection) (int64, error) {
-	var count int64
-
 	source := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", connection.User, connection.Password, connection.Host, connection.Port, connection.Database)
 	db, err := sql.Open("mysql", source)
 	if err != nil {
@@ -111,8 +117,13 @@ func selectProcessCount(connection common.Connection) (int64, error) {
 	}
 	defer db.Close()
 
-	err = db.QueryRow("select count(*) from information_schema.PROCESSLIST").Scan(&count)
-	if err != nil {
+	return execProcessCount(db)
+}
+
+// execProcessCount reads the process count from an open database handle.
+func execProcessCount(db *sql.DB) (int64, error) {
+	var count int64
+	if err := db.QueryRow("select count(*) from information_schema.PROCESSLIST").Scan(&count); err != nil {
 		return 0, err
 	}
 

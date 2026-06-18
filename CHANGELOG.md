@@ -5,6 +5,22 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.61.0] - 2026-06-18
+
+### Added
+
+- New `check-postgres-query` plugin: query-driven PostgreSQL check — a query (or stored function) returns a status (`ok`/`warn`/`warning`/`error`) and a message that map to the Sensu exit code. Inline (`-q`) or file (`--query-file`).
+- New `pkg/dbquery` package holding the database-agnostic query/status logic shared by the query checks (query resolution, status mapping, batch aggregation).
+
+### Changed
+
+- Documented `check-postgres` with a README.
+- Separated pure logic from system/database I/O across several checks (`check-cpu`, `check-memory`, `check-uptime`, `check-ping`, `check-process`, `check-postgres`, `check-mysql-ping`, `check-mysql-processes`, `check-nginx`) and added focused unit tests, raising overall statement coverage from ~30% to over 41%.
+
+### Fixed
+
+- `check-postgres` and `check-mysql-ping` no longer panic when the server version banner cannot be parsed; they now return a clear error instead.
+
 ## [2.60.0] - 2026-06-17
 
 ### Added

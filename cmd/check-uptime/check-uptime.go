@@ -14,6 +14,13 @@ func main() {
 
 	uptime, _ := host.Uptime()
 
+	c.Ok(fmt.Sprintf("Uptime is %s", formatUptime(uptime)))
+}
+
+// formatUptime renders a number of seconds as a human-readable
+// "d days, h hours, m minutes, s seconds" string, using singular/plural units
+// and omitting leading zero components.
+func formatUptime(uptime uint64) string {
 	days := uptime / (60 * 60 * 24)
 	hours := (uptime - (days * 60 * 60 * 24)) / (60 * 60)
 	minutes := ((uptime - (days * 60 * 60 * 24)) - (hours * 60 * 60)) / 60
@@ -51,5 +58,5 @@ func main() {
 		elements = append(elements, fmt.Sprintf("%d seconds", seconds))
 	}
 
-	c.Ok(fmt.Sprintf("Uptime is %s", strings.Join(elements, ", ")))
+	return strings.Join(elements, ", ")
 }

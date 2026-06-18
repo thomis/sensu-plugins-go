@@ -24,16 +24,38 @@ func main() {
 	usage, err := cpuUsage(sleep)
 	if err != nil {
 		c.Error(err)
+		return
 	}
 
-	output, perf := formatOutput(usage, warn, crit)
-	switch {
-	case usage[3] <= float64(100-crit):
-		c.Critical(fmt.Sprintf("%s | %s", output, perf))
-	case usage[3] <= float64(100-warn):
-		c.Warning(fmt.Sprintf("%s | %s", output, perf))
+	level, message := evaluate(usage, warn, crit)
+	report(c, level, message)
+}
+
+// report maps a level (ok|warning|critical) to the matching check result.
+func report(c *check.CheckStruct, level string, message string) {
+	switch level {
+	case "critical":
+		c.Critical(message)
+	case "warning":
+		c.Warning(message)
 	default:
-		c.Ok(fmt.Sprintf("%s | %s", output, perf))
+		c.Ok(message)
+	}
+}
+
+// evaluate formats the CPU usage and decides the level (ok|warning|critical)
+// based on the idle percentage (usageStats[3]) against the thresholds.
+func evaluate(usageStats []float64, warn, crit int) (string, string) {
+	output, perf := formatOutput(usageStats, warn, crit)
+	message := fmt.Sprintf("%s | %s", output, perf)
+
+	switch {
+	case usageStats[3] <= float64(100-crit):
+		return "critical", message
+	case usageStats[3] <= float64(100-warn):
+		return "warning", message
+	default:
+		return "ok", message
 	}
 }
 

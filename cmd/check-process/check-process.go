@@ -10,10 +10,7 @@ import (
 )
 
 func main() {
-	var (
-		pattern string
-		count   int
-	)
+	var pattern string
 
 	c := check.New("CheckProcess")
 	c.Option.StringVarP(&pattern, "regexp_pattern", "p", "a_process_name", "PATTERN")
@@ -22,14 +19,29 @@ func main() {
 	count, err := countProcess(pattern)
 	if err != nil {
 		c.Error(err)
+		return
 	}
 
-	switch {
-	case count == 0:
-		c.Critical(fmt.Sprintf("Unable to find process [%s]", pattern))
+	level, message := describe(pattern, count)
+	report(c, level, message)
+}
+
+// report maps a level (ok|critical) to the matching check result.
+func report(c *check.CheckStruct, level string, message string) {
+	switch level {
+	case "critical":
+		c.Critical(message)
 	default:
-		c.Ok(fmt.Sprintf("Process [%s]: %d occurence(s)", pattern, count))
+		c.Ok(message)
 	}
+}
+
+// describe turns a match count into a level and message.
+func describe(pattern string, count int) (string, string) {
+	if count == 0 {
+		return "critical", fmt.Sprintf("Unable to find process [%s]", pattern)
+	}
+	return "ok", fmt.Sprintf("Process [%s]: %d occurence(s)", pattern, count)
 }
 
 func countProcess(pattern string) (int, error) {
