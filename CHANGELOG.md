@@ -10,14 +10,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - New `check-oracle-query` plugin: runs a custom SQL query or PL/SQL block (procedure/function) that returns a status (`ok`/`warn`/`warning`/`error`) and a message, mapping the status to the corresponding Sensu exit code. The query can be passed inline (`-q`) or from a file (`--query-file`). Batch mode (`-f`) runs the same query against multiple connections in parallel (worst-status-wins), consistent with `check-oracle-ping` and `check-oracle-validity`.
+- New `check-postgres-query` plugin: the same query-driven check for PostgreSQL — a query (or stored function) returns a status and message that map to the Sensu exit code. Inline (`-q`) or file (`--query-file`).
+- New `pkg/dbquery` package holding the database-agnostic query/status logic shared by the query checks (query resolution, status mapping, batch aggregation).
 
 ### Changed
 
 - Refactored the Oracle checks (`check-oracle-ping`, `check-oracle-validity`, `check-oracle-query`) to separate database execution from connection handling and to inject the per-connection runner, substantially increasing unit-test coverage (mocked DB via `go-sqlmock`).
+- Documented `check-postgres` with a README and increased its unit-test coverage.
+- Separated pure logic from system/database I/O across several checks (`check-cpu`, `check-memory`, `check-uptime`, `check-ping`, `check-process`, `check-mysql-ping`, `check-mysql-processes`, `check-nginx`) and added focused unit tests, raising overall statement coverage from ~30% to over 41%.
 
 ### Fixed
 
 - Oracle batch mode no longer leaks goroutines when the overall timeout is reached (result channel is now buffered).
+- `check-postgres` and `check-mysql-ping` no longer panic when the server version banner cannot be parsed; they now return a clear error instead.
 
 ## [2.59.0] - 2026-06-17
 

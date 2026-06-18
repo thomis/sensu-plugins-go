@@ -33,7 +33,8 @@ The thomis/sensu-plugins-go repository has been decoupled from its upstream and 
 | | check-http | HTTP/HTTPS endpoint monitoring with response validation | [README](cmd/check-http/README.md) |
 | | check-http-json | JSON API monitoring with response parsing and validation | [README](cmd/check-http-json/README.md) |
 | | check-certificate | SSL/TLS certificate expiration and validation | [README](cmd/check-certificate/README.md) |
-| **Database Monitoring** | check-postgres | PostgreSQL connectivity and query performance | |
+| **Database Monitoring** | check-postgres | PostgreSQL connectivity and version check | [README](cmd/check-postgres/README.md) |
+| | check-postgres-query | Run a custom PostgreSQL query/function that returns status and message | [README](cmd/check-postgres-query/README.md) |
 | | check-mysql-ping | MySQL connectivity check | |
 | | check-mysql-processes | Monitor MySQL process list and connections | |
 | | check-oracle-ping | Oracle database connectivity | [README](cmd/check-oracle-ping/README.md) |
