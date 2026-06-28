@@ -51,6 +51,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.event.release.tag_name }}
+          fail_on_unmatched_files: true
           files: |
             releases/sensu-checks-go.linux.amd64.tar.gz
             releases/sensu-checks-go.linux.amd64.tar.gz.sha512
@@ -58,6 +59,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.event.release.tag_name }}
+          fail_on_unmatched_files: true
           files: |
             releases/sensu-checks-go.linux.arm64.tar.gz
             releases/sensu-checks-go.linux.arm64.tar.gz.sha512
@@ -160,6 +162,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.event.release.tag_name }}
+          fail_on_unmatched_files: true
           files: |
             releases/sensu-checks-go.darwin.arm64.tar.gz
             releases/sensu-checks-go.darwin.arm64.tar.gz.sha512
