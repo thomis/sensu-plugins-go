@@ -24,8 +24,8 @@ jobs:
           # Container runs as root while the workspace is owned by the runner
           # user; allow git (used by Go VCS stamping / staticcheck) to operate on it.
           git config --global --add safe.directory '*'
-      - uses: actions/checkout@v6
-      - uses: actions/setup-go@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
         with:
           go-version-file: '.tool-versions'
           check-latest: true
@@ -72,8 +72,8 @@ jobs:
       OCI_DIR: /opt/oracle/instantclient_23_3
       NLS_LANG: AMERICAN_AMERICA.AL32UTF8
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-go@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
         with:
           go-version-file: '.tool-versions'
           check-latest: true
