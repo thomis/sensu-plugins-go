@@ -8,6 +8,7 @@ A Sensu check plugin for monitoring HTTP/HTTPS endpoints.
 - **Basic Authentication**: Support for username/password authentication
 - **SSL/TLS Support**: Verify HTTPS endpoints with optional certificate validation
 - **Response Code Validation**: Alert based on HTTP status codes
+- **Response Body Validation**: Alert when the response body does not match a regular expression
 - **Configurable Timeout**: Set request timeout for slow endpoints
 - **Redirect Detection**: Returns warning status for 3xx redirect responses
 
@@ -24,6 +25,7 @@ check-http [OPTIONS]
 - `--username` - Username for basic authentication
 - `--password` - Password for basic authentication
 - `-k, --insecure` - Skip SSL certificate verification (default: false)
+- `-p, --pattern` - Regular expression the response body must match (critical if not found)
 
 ## Examples
 
@@ -48,14 +50,17 @@ check-http -u http://example.com/health
 
 # Check API endpoint
 check-http -u https://api.example.com/v1/status
+
+# Check that the page content still contains an expected text
+check-http -u https://example.com -p "COMING SOON"
 ```
 
 ## Exit Codes
 
 - **0 (OK)**: Response code 200-299 (success)
 - **1 (WARNING)**: Response code 300-399 (redirect)
-- **2 (CRITICAL)**: Response code 400+ (client/server error)
-- **3 (ERROR)**: Connection error, timeout, or other failure
+- **2 (CRITICAL)**: Response code 400+ (client/server error), or pattern not found in response body
+- **3 (ERROR)**: Connection error, timeout, invalid pattern, or other failure
 
 ## Output Examples
 
@@ -105,6 +110,6 @@ CheckHTTP ERROR: Get "http://example.com": dial tcp: i/o timeout
 
 - Does not follow redirects (returns the redirect status code)
 - Only performs GET requests
-- Does not validate response body content
+- Response body is only read when a pattern is given (limited to the first 10 MB)
 - Timeout applies to the entire request/response cycle
 - Basic authentication credentials are sent in the Authorization header

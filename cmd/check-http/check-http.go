@@ -2,12 +2,18 @@ package main
 
 import (
 	"crypto/tls"
+	"fmt"
+	"io"
 	"net/http"
+	"regexp"
 	"strconv"
 	"time"
 
 	"github.com/thomis/sensu-plugins-go/pkg/check"
 )
+
+// bodyLimit caps how much of the response body is read for pattern matching.
+const bodyLimit = 10 * 1024 * 1024
 
 type input struct {
 	Url      string
@@ -15,6 +21,7 @@ type input struct {
 	Insecure bool
 	Username string
 	Password string
+	Pattern  string
 }
 
 func main() {
@@ -29,10 +36,16 @@ func main() {
 	c.Option.StringVarP(&input.Username, "username", "", "", "Username for basic authentication")
 	c.Option.StringVarP(&input.Password, "password", "", "", "Password for basic authentication")
 	c.Option.BoolVarP(&input.Insecure, "insecure", "k", false, "INSECURE (skips peer certificate validation)")
+	c.Option.StringVarP(&input.Pattern, "pattern", "p", "", "PATTERN (regular expression the response body must match, critical if not found)")
 
 	c.Init()
 
-	status, err := statusCode(input)
+	pattern, err := compilePattern(input.Pattern)
+	if err != nil {
+		c.Error(err)
+	}
+
+	status, body, err := fetch(input)
 	if err != nil {
 		c.Error(err)
 	}
@@ -44,12 +57,23 @@ func main() {
 		c.Ok(strconv.Itoa(status))
 	case status >= 300:
 		c.Warning(strconv.Itoa(status))
+	case pattern != nil && !pattern.MatchString(body):
+		c.Critical(fmt.Sprintf("%d, pattern [%s] not found in response body", status, input.Pattern))
+	case pattern != nil:
+		c.Ok(fmt.Sprintf("%d, pattern [%s] found in response body", status, input.Pattern))
 	default:
 		c.Ok(strconv.Itoa(status))
 	}
 }
 
-func statusCode(input input) (int, error) {
+func compilePattern(pattern string) (*regexp.Regexp, error) {
+	if pattern == "" {
+		return nil, nil
+	}
+	return regexp.Compile(pattern)
+}
+
+func fetch(input input) (int, string, error) {
 	c := http.Client{
 		Timeout: time.Duration(input.Timeout) * time.Second,
 		Transport: &http.Transport{
@@ -58,7 +82,7 @@ func statusCode(input input) (int, error) {
 
 	request, err := http.NewRequest(http.MethodGet, input.Url, http.NoBody)
 	if err != nil {
-		return 0, err
+		return 0, "", err
 	}
 
 	if len(input.Username) > 0 || len(input.Password) > 0 {
@@ -67,9 +91,18 @@ func statusCode(input input) (int, error) {
 
 	response, err := c.Do(request)
 	if err != nil {
-		return 0, err
+		return 0, "", err
 	}
 	defer response.Body.Close()
 
-	return response.StatusCode, nil
+	if input.Pattern == "" {
+		return response.StatusCode, "", nil
+	}
+
+	body, err := io.ReadAll(io.LimitReader(response.Body, bodyLimit))
+	if err != nil {
+		return 0, "", err
+	}
+
+	return response.StatusCode, string(body), nil
 }

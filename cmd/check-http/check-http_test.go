@@ -73,7 +73,7 @@ func TestStatusCode(t *testing.T) {
 				Insecure: false,
 			}
 
-			status, err := statusCode(input)
+			status, _, err := fetch(input)
 
 			if tt.expectedError {
 				assert.NotNil(t, err)
@@ -144,7 +144,7 @@ func TestStatusCodeWithAuthentication(t *testing.T) {
 				Password: tt.password,
 			}
 
-			status, err := statusCode(input)
+			status, _, err := fetch(input)
 
 			if tt.expectedError {
 				assert.NotNil(t, err)
@@ -187,7 +187,7 @@ func TestStatusCodeWithInvalidURL(t *testing.T) {
 				Insecure: false,
 			}
 
-			status, err := statusCode(input)
+			status, _, err := fetch(input)
 
 			if tt.expectedError {
 				assert.NotNil(t, err)
@@ -232,7 +232,7 @@ func TestStatusCodeWithHTTPS(t *testing.T) {
 				Insecure: tt.insecure,
 			}
 
-			status, err := statusCode(input)
+			status, _, err := fetch(input)
 
 			if tt.expectedError {
 				assert.NotNil(t, err)
@@ -242,4 +242,85 @@ func TestStatusCodeWithHTTPS(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestFetchWithPattern(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintln(w, "<html><body>THE NEXT CHAPTER OF CROSS-COUNTRY. <br/>COMING SOON.</body></html>")
+	}))
+	defer server.Close()
+
+	tests := []struct {
+		name          string
+		pattern       string
+		expectedMatch bool
+	}{
+		{
+			name:          "Pattern found",
+			pattern:       "NEXT CHAPTER OF CROSS-COUNTRY",
+			expectedMatch: true,
+		},
+		{
+			name:          "Regular expression pattern found",
+			pattern:       "(?s)CROSS-COUNTRY.*COMING SOON",
+			expectedMatch: true,
+		},
+		{
+			name:          "Pattern not found",
+			pattern:       "SOLD OUT",
+			expectedMatch: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			input := input{
+				Url:     server.URL,
+				Timeout: 5,
+				Pattern: tt.pattern,
+			}
+
+			pattern, err := compilePattern(tt.pattern)
+			assert.Nil(t, err)
+			assert.NotNil(t, pattern)
+
+			status, body, err := fetch(input)
+			assert.Nil(t, err)
+			assert.Equal(t, http.StatusOK, status)
+			assert.Equal(t, tt.expectedMatch, pattern.MatchString(body))
+		})
+	}
+}
+
+func TestFetchWithoutPatternSkipsBody(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintln(w, "some body")
+	}))
+	defer server.Close()
+
+	input := input{
+		Url:     server.URL,
+		Timeout: 5,
+	}
+
+	status, body, err := fetch(input)
+	assert.Nil(t, err)
+	assert.Equal(t, http.StatusOK, status)
+	assert.Equal(t, "", body)
+}
+
+func TestCompilePattern(t *testing.T) {
+	pattern, err := compilePattern("")
+	assert.Nil(t, err)
+	assert.Nil(t, pattern)
+
+	pattern, err = compilePattern("COMING SOON")
+	assert.Nil(t, err)
+	assert.NotNil(t, pattern)
+
+	pattern, err = compilePattern("([invalid")
+	assert.NotNil(t, err)
+	assert.Nil(t, pattern)
 }

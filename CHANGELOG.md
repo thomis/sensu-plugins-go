@@ -5,6 +5,12 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.68.0] - 2026-08-22
+
+### Added
+
+- check-http: new option `-p, --pattern` with a regular expression the response body must match. Reports critical if the pattern is not found (e.g. to detect content changes on a page)
+
 ## [2.67.1] - 2026-08-20
 
 ### Changed
