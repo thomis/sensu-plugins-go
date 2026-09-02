@@ -11,7 +11,7 @@ require (
 	github.com/hico-horiuchi/ohgibone v0.22.1
 	github.com/lib/pq v1.12.3
 	github.com/shirou/gopsutil/v3 v3.24.5
-	github.com/shirou/gopsutil/v4 v4.26.7
+	github.com/shirou/gopsutil/v4 v4.26.8
 	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.11.1
 )
@@ -20,7 +20,7 @@ require (
 	filippo.io/edwards25519 v1.2.0 // indirect
 	github.com/VictoriaMetrics/easyproto v1.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/ebitengine/purego v0.10.2 // indirect
+	github.com/ebitengine/purego v0.11.0 // indirect
 	github.com/go-logfmt/logfmt v0.6.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/godror/knownpb v0.3.0 // indirect
@@ -32,7 +32,7 @@ require (
 	github.com/tklauser/go-sysconf v0.4.0 // indirect
 	github.com/tklauser/numcpus v0.12.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
-	golang.org/x/exp v0.0.0-20260820142414-ca536658362e // indirect
+	golang.org/x/exp v0.0.0-20260824195058-e88cd73687aa // indirect
 	golang.org/x/sys v0.47.0 // indirect
 	google.golang.org/protobuf v1.36.12 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
