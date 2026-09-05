@@ -5,7 +5,7 @@ go 1.26.0
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/bitly/go-simplejson v0.5.1
-	github.com/go-sql-driver/mysql v1.10.0
+	github.com/go-sql-driver/mysql v1.10.1
 	github.com/godror/godror v0.51.4
 	github.com/gomodule/redigo v1.9.3
 	github.com/hico-horiuchi/ohgibone v0.22.1
