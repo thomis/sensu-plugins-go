@@ -38,7 +38,14 @@ jobs:
           unzip -o instantclient_sdk.zip
       - name: Install staticcheck
         run: |
-          go install honnef.co/go/tools/cmd/staticcheck@latest
+          # Build staticcheck against the newest golang.org/x/tools: the
+          # stable release pins an older x/tools whose export-data decoder
+          # cannot read freshly released Go toolchains ("export data
+          # version X is greater than maximum supported version Y").
+          d=$(mktemp -d)
+          (cd "$d" && go mod init scbuild >/dev/null 2>&1 \
+            && go get honnef.co/go/tools/cmd/staticcheck@latest golang.org/x/tools@latest \
+            && go build -o "$(go env GOPATH)/bin/staticcheck" honnef.co/go/tools/cmd/staticcheck)
       - name: Install govulncheck
         run: |
           go install golang.org/x/vuln/cmd/govulncheck@latest
@@ -149,7 +156,14 @@ jobs:
           ls -la /opt/oracle/instantclient_23_3/
       - name: Install staticcheck
         run: |
-          go install honnef.co/go/tools/cmd/staticcheck@latest
+          # Build staticcheck against the newest golang.org/x/tools: the
+          # stable release pins an older x/tools whose export-data decoder
+          # cannot read freshly released Go toolchains ("export data
+          # version X is greater than maximum supported version Y").
+          d=$(mktemp -d)
+          (cd "$d" && go mod init scbuild >/dev/null 2>&1 \
+            && go get honnef.co/go/tools/cmd/staticcheck@latest golang.org/x/tools@latest \
+            && go build -o "$(go env GOPATH)/bin/staticcheck" honnef.co/go/tools/cmd/staticcheck)
       - name: Install govulncheck
         run: |
           go install golang.org/x/vuln/cmd/govulncheck@latest

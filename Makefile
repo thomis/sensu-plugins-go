@@ -70,7 +70,13 @@ lint:
 tools_install:
 	@echo "\nInstalling staticcheck and govulncheck..."
 	@echo "-----------------------------------------"
-	go install honnef.co/go/tools/cmd/staticcheck@latest
+	# Build staticcheck against the newest golang.org/x/tools: the stable
+	# release pins an older x/tools whose export-data decoder cannot read
+	# freshly released Go toolchains ("export data version X is greater
+	# than maximum supported version Y").
+	d=$$(mktemp -d) && (cd "$$d" && go mod init scbuild >/dev/null 2>&1 \
+		&& go get honnef.co/go/tools/cmd/staticcheck@latest golang.org/x/tools@latest \
+		&& go build -o "$$(go env GOPATH)/bin/staticcheck" honnef.co/go/tools/cmd/staticcheck)
 	go install golang.org/x/vuln/cmd/govulncheck@latest
 	asdf reshim golang
 

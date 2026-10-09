@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Update dependencies (go 1.27.2)
 
+### Fixed
+
+- CI lint: build staticcheck against the latest golang.org/x/tools so it can read Go 1.27.2 export data
+
 ## [2.70.0] - 2026-10-01
 
 ### Changed
