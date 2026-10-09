@@ -1,6 +1,6 @@
 module github.com/thomis/sensu-plugins-go
 
-go 1.26.0
+go 1.27.2
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
@@ -26,7 +26,7 @@ require (
 	github.com/lufia/plan9stats v0.0.0-20260802145828-341c2f0c90b5 // indirect
 	github.com/oklog/ulid/v2 v2.1.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20260916203055-22a1a467d9f0 // indirect
-	github.com/shoenig/go-m1cpu v0.2.2 // indirect
+	github.com/shoenig/go-m1cpu v0.2.4 // indirect
 	github.com/tklauser/go-sysconf v0.4.0 // indirect
 	github.com/tklauser/numcpus v0.12.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
