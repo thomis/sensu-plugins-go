@@ -18,6 +18,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     env:
       ORACLE_HOME: /opt/instantclient_23_8
       LD_LIBRARY_PATH: /opt/instantclient_23_8
