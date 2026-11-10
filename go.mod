@@ -6,13 +6,13 @@ require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/bitly/go-simplejson v0.5.1
 	github.com/go-sql-driver/mysql v1.10.1
-	github.com/godror/godror v0.51.5
+	github.com/godror/godror v0.51.6
 	github.com/gomodule/redigo v1.9.3
 	github.com/hico-horiuchi/ohgibone v0.22.1
 	github.com/lib/pq v1.12.3
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/shirou/gopsutil/v4 v4.26.10
-	github.com/spf13/pflag v1.0.10
+	github.com/spf13/pflag v1.1.0
 	github.com/stretchr/testify v1.12.1
 )
 
@@ -33,6 +33,6 @@ require (
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/exp v0.0.0-20260908205506-85c1c2202aba // indirect
 	golang.org/x/sync v0.23.0 // indirect
-	golang.org/x/sys v0.49.0 // indirect
+	golang.org/x/sys v0.50.0 // indirect
 	google.golang.org/protobuf v1.36.12 // indirect
 )
