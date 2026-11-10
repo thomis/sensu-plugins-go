@@ -5,6 +5,13 @@ All notable changes will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.74.0] - 2026-11-10
+
+### Changed
+
+- Update dependencies (go 1.27.4)
+- Makefile: replace `tools_install` with `tools-install` (aligned with ikey.cloud/tools)
+
 ## [2.73.0] - 2026-11-10
 
 ### Changed

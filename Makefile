@@ -10,7 +10,7 @@ RESET := \033[0m
 
 .DEFAULT_GOAL := build
 
-.PHONY: help build outdated update test format lint vul tools_install cover build_linux_amd64 build_linux_arm64 build_darwin_arm64 build_all clean
+.PHONY: help build outdated update test format lint vul tools-install cover build_linux_amd64 build_linux_arm64 build_darwin_arm64 build_all clean
 
 # Default target - build for local platform
 default: build
@@ -31,7 +31,7 @@ help:
 	@echo "  build_darwin_arm64- Build for macOS ARM64"
 	@echo "  build_all         - Build for all platforms"
 	@echo "  clean             - Clean bin and releases directories"
-	@echo "  tools_install     - Install staticcheck and govulncheck"
+	@echo "  tools-install     - Install staticcheck + govulncheck, reshim asdf"
 
 build: format test lint vul
 	@echo "\nBuilding for local platform..."
@@ -67,16 +67,9 @@ lint:
 		@echo "----------------"
 		staticcheck ./...
 
-tools_install:
-	@echo "\nInstalling staticcheck and govulncheck..."
-	@echo "-----------------------------------------"
-	# Build staticcheck against the newest golang.org/x/tools: the stable
-	# release pins an older x/tools whose export-data decoder cannot read
-	# freshly released Go toolchains ("export data version X is greater
-	# than maximum supported version Y").
-	d=$$(mktemp -d) && (cd "$$d" && go mod init scbuild >/dev/null 2>&1 \
-		&& go get honnef.co/go/tools/cmd/staticcheck@latest golang.org/x/tools@latest \
-		&& go build -o "$$(go env GOPATH)/bin/staticcheck" honnef.co/go/tools/cmd/staticcheck)
+tools-install:
+	@echo "$(GREEN)>>> Installing dev tools (staticcheck, govulncheck) and reshimming asdf$(RESET)"
+	go install honnef.co/go/tools/cmd/staticcheck@latest
 	go install golang.org/x/vuln/cmd/govulncheck@latest
 	asdf reshim golang
 
